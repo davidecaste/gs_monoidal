@@ -1,0 +1,34 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (61) at (5, -1) {};
+		\node [style=none] (62) at (5, -1.5) {$X\otimes Y$};
+		\node [style=none] (64) at (5, 1) {};
+		\node [style=bn] (65) at (5, 1) {};
+		\node [style=none] (66) at (7, 0.5) {$=$};
+		\node [style=none] (67) at (9, -1) {};
+		\node [style=none] (68) at (11, -1) {};
+		\node [style=bn] (69) at (9, 1) {};
+		\node [style=bn] (70) at (11, 1) {};
+		\node [style=none] (71) at (9, -1.5) {$X$};
+		\node [style=none] (72) at (11, -1.5) {$Y$};
+		\node [style=none] (77) at (16, 0.5) {$=$};
+		\node [style=none] (78) at (18, 2) {};
+		\node [style=none] (79) at (18, -1) {};
+		\node [style=none] (80) at (21, -1) {};
+		\node [style=none] (81) at (21, 2) {};
+		\node [style=none] (82) at (14, -1) {};
+		\node [style=none] (83) at (14, -1.5) {$I$};
+		\node [style=none] (85) at (14, 1) {};
+		\node [style=bn] (86) at (14, 1) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (64.center) to (61.center);
+		\draw (67.center) to (69);
+		\draw (68.center) to (70);
+		\draw [style=ds] (78.center) to (79.center);
+		\draw [style=ds] (79.center) to (80.center);
+		\draw [style=ds] (80.center) to (81.center);
+		\draw [style=ds] (81.center) to (78.center);
+		\draw (85.center) to (82.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

@@ -1,0 +1,43 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (58) at (0, -1) {};
+		\node [style=bn] (59) at (0, 3) {};
+		\node [style=none] (60) at (-1, 4) {};
+		\node [style=none] (61) at (1, 4) {};
+		\node [style=none] (62) at (-1, -2) {};
+		\node [style=none] (63) at (1, -2) {};
+		\node [style=none] (64) at (0, -1) {};
+		\node [style=bn] (65) at (0, -1) {};
+		\node [style=none] (73) at (-0.5, 1) {$X$};
+		\node [style=none] (88) at (-2.5, 1) {$=$};
+		\node [style=bn] (188) at (-5, 0) {};
+		\node [style=none] (189) at (-6, 1) {};
+		\node [style=none] (190) at (-4, 1) {};
+		\node [style=none] (191) at (-5.5, -2) {$X$};
+		\node [style=none] (192) at (-5, -2) {};
+		\node [style=none] (193) at (-7, 2) {};
+		\node [style=none] (194) at (-8, 1) {};
+		\node [style=none] (195) at (-6, 1) {};
+		\node [style=none] (196) at (-7, 2) {};
+		\node [style=bn] (197) at (-7, 2) {};
+		\node [style=none] (198) at (-4, 4) {};
+		\node [style=none] (199) at (-7, 4) {};
+		\node [style=none] (200) at (-8, -2) {};
+		\node [style=none] (201) at (-6.5, 4) {$X$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (59) to (58.center);
+		\draw [in=165, out=-90] (60.center) to (59);
+		\draw [in=270, out=15] (59) to (61.center);
+		\draw [bend left=45] (62.center) to (64.center);
+		\draw [bend left=45] (64.center) to (63.center);
+		\draw [in=165, out=-90] (189.center) to (188);
+		\draw [in=270, out=15] (188) to (190.center);
+		\draw (188) to (192.center);
+		\draw [bend left=45] (194.center) to (196.center);
+		\draw [bend left=45] (196.center) to (195.center);
+		\draw (194.center) to (200.center);
+		\draw (199.center) to (197);
+		\draw (198.center) to (190.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

@@ -1,0 +1,22 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (0.5, 3.5) {$X$};
+		\node [style=none] (5) at (-2, 2.5) {$=$};
+		\node [style=none] (7) at (8, 3.5) {};
+		\node [style=none] (8) at (8.5, 3.5) {$X$};
+		\node [style=none] (9) at (7, 2.5) {$=$};
+		\node [style=none] (10) at (-4, 2.5) {$\mathrm{match}_X$};
+		\node [style=none] (11) at (5, 2.5) {$\mathrm{new}_X$};
+		\node [style=bn] (12) at (8, 1) {};
+		\node [style=none] (13) at (0, 3.5) {};
+		\node [style=bn] (14) at (0, 2) {};
+		\node [style=none] (15) at (1, 1) {};
+		\node [style=none] (16) at (-1, 1) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (7.center) to (12);
+		\draw (14) to (13.center);
+		\draw [in=-15, out=90] (15.center) to (14);
+		\draw [in=90, out=-165] (14) to (16.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

@@ -1,0 +1,76 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (-3.5, 0) {};
+		\node [style=bn] (1) at (-3.5, 2) {};
+		\node [style=none] (2) at (-4.5, 3) {};
+		\node [style=none] (3) at (-2.5, 3) {};
+		\node [style=none] (4) at (-4.5, -1) {};
+		\node [style=none] (5) at (-2.5, -1) {};
+		\node [style=none] (6) at (-3.5, 0) {};
+		\node [style=bn] (7) at (-3.5, 0) {};
+		\node [style=bn] (9) at (3.5, 0) {};
+		\node [style=none] (10) at (2.5, 1) {};
+		\node [style=none] (11) at (4.5, 1) {};
+		\node [style=none] (12) at (14, -1) {$X$};
+		\node [style=none] (13) at (3.5, -1) {};
+		\node [style=none] (14) at (1.5, 2) {};
+		\node [style=none] (15) at (0.5, 1) {};
+		\node [style=none] (16) at (2.5, 1) {};
+		\node [style=none] (17) at (1.5, 2) {};
+		\node [style=bn] (18) at (1.5, 2) {};
+		\node [style=none] (19) at (4.5, 3) {};
+		\node [style=none] (21) at (0.5, -1) {};
+		\node [style=none] (22) at (14, 3) {$X$};
+		\node [style=none] (23) at (6, 1) {$=$};
+		\node [style=none] (25) at (-2.5, -1) {};
+		\node [style=none] (27) at (-1, 1) {};
+		\node [style=none] (28) at (-1, 1) {$=$};
+		\node [style=none] (29) at (10.5, 3) {};
+		\node [style=none] (43) at (-6, 1) {$=$};
+		\node [style=none] (50) at (-7.5, 2.75) {};
+		\node [style=none] (51) at (-7.5, -1) {};
+		\node [style=none] (53) at (-8.25, 1) {$X$};
+		\node [style=none] (56) at (-4.5, -1) {};
+		\node [style=none] (57) at (-2.5, 3) {};
+		\node [style=none] (58) at (7.5, -1) {};
+		\node [style=none] (60) at (12, 1) {$=$};
+		\node [style=none] (61) at (13.5, -1) {};
+		\node [style=none] (63) at (13.5, 3) {};
+		\node [style=bn] (65) at (-4.5, 3) {};
+		\node [style=bn] (66) at (-2.5, -1) {};
+		\node [style=bn] (67) at (1.5, 3) {};
+		\node [style=bn] (68) at (3.5, -1) {};
+		\node [style=bn] (69) at (7.5, 3) {};
+		\node [style=bn] (70) at (10.5, -1) {};
+		\node [style=bn] (71) at (13.5, 1.25) {};
+		\node [style=bn] (72) at (13.5, 0.75) {};
+		\node [style=none] (73) at (9, -1) {};
+		\node [style=bn] (74) at (9, 3) {};
+		\node [style=bn] (75) at (9, -1) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (1) to (0.center);
+		\draw [in=165, out=-90] (2.center) to (1);
+		\draw [in=270, out=15] (1) to (3.center);
+		\draw [bend left=45] (4.center) to (6.center);
+		\draw [bend left=45] (6.center) to (5.center);
+		\draw [in=165, out=-90] (10.center) to (9);
+		\draw [in=270, out=15] (9) to (11.center);
+		\draw (9) to (13.center);
+		\draw [bend left=45] (15.center) to (17.center);
+		\draw [bend left=45] (17.center) to (16.center);
+		\draw (15.center) to (21.center);
+		\draw (19.center) to (11.center);
+		\draw (50.center) to (51.center);
+		\draw (4.center) to (56.center);
+		\draw (57.center) to (3.center);
+		\draw (65) to (2.center);
+		\draw (25.center) to (66);
+		\draw (67) to (18);
+		\draw (69) to (58.center);
+		\draw (29.center) to (70);
+		\draw (63.center) to (71);
+		\draw (72) to (61.center);
+		\draw (74) to (73.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

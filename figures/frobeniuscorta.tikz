@@ -1,0 +1,53 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=bn] (74) at (-1, 0) {};
+		\node [style=none] (75) at (-2, 1) {};
+		\node [style=none] (76) at (0, 1) {};
+		\node [style=none] (77) at (-1.5, -1) {$X$};
+		\node [style=none] (78) at (-1, -1) {};
+		\node [style=none] (79) at (-3, 2) {};
+		\node [style=none] (80) at (-4, 1) {};
+		\node [style=none] (81) at (-2, 1) {};
+		\node [style=none] (82) at (-3, 2) {};
+		\node [style=bn] (83) at (-3, 2) {};
+		\node [style=none] (84) at (0, 3) {};
+		\node [style=none] (85) at (-3, 3) {};
+		\node [style=none] (86) at (-4, -1) {};
+		\node [style=none] (87) at (-2.5, 3) {$X$};
+		\node [style=bn] (89) at (4, 0) {};
+		\node [style=none] (90) at (3, 1) {};
+		\node [style=none] (91) at (5, 1) {};
+		\node [style=none] (92) at (3.5, -1) {$X$};
+		\node [style=none] (93) at (4, -1) {};
+		\node [style=none] (94) at (3, 1) {};
+		\node [style=none] (95) at (7, 1) {};
+		\node [style=none] (96) at (6, 2) {};
+		\node [style=none] (97) at (5, 1) {};
+		\node [style=none] (98) at (7, 1) {};
+		\node [style=none] (99) at (6, 2) {};
+		\node [style=bn] (100) at (6, 2) {};
+		\node [style=none] (101) at (6, 3) {};
+		\node [style=none] (102) at (6.5, 3) {$X$};
+		\node [style=none] (103) at (3, 3) {};
+		\node [style=none] (104) at (7, -1) {};
+		\node [style=none] (105) at (1.5, 1) {$=$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [in=165, out=-90] (75.center) to (74);
+		\draw [in=270, out=15] (74) to (76.center);
+		\draw (74) to (78.center);
+		\draw [bend left=45] (80.center) to (82.center);
+		\draw [bend left=45] (82.center) to (81.center);
+		\draw (80.center) to (86.center);
+		\draw (85.center) to (83);
+		\draw (84.center) to (76.center);
+		\draw [in=165, out=-90] (90.center) to (89);
+		\draw [in=270, out=15] (89) to (91.center);
+		\draw (89) to (93.center);
+		\draw [bend left=45] (97.center) to (99.center);
+		\draw [bend left=45] (99.center) to (98.center);
+		\draw (101.center) to (100);
+		\draw (103.center) to (94.center);
+		\draw (98.center) to (104.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

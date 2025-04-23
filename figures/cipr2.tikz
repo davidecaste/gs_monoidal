@@ -1,0 +1,49 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (19) at (-10.5, -3) {};
+		\node [style=none] (20) at (-10.5, -3) {};
+		\node [style=none] (21) at (-10.5, -3) {};
+		\node [style=none] (22) at (-10.5, -3) {};
+		\node [style=none] (23) at (-10.5, -3) {};
+		\node [style=none] (24) at (-12.5, -3) {};
+		\node [style=none] (25) at (-12.5, -3) {};
+		\node [style=none] (26) at (-12.5, -3) {};
+		\node [style=none] (27) at (-11.5, -4) {};
+		\node [style=none] (28) at (-10.5, -3) {};
+		\node [style=none] (29) at (-12.5, -3) {};
+		\node [style=none] (30) at (-11.5, -4) {};
+		\node [style=none] (31) at (-11.5, -4) {};
+		\node [style=none] (32) at (-11.5, -4) {};
+		\node [style=none] (33) at (-11.5, -5) {};
+		\node [style=none] (34) at (-11.5, -4) {};
+		\node [style=bn] (35) at (-11.5, -5) {};
+		\node [style=none] (36) at (-9.5, -4) {};
+		\node [style=none] (37) at (-9.5, -4) {\};
+		\node [style=none] (38) at (-9.5, -4) {};
+		\node [style=none] (39) at (-9.5, -4) {$\le$};
+		\node [style=none] (40) at (-11.5, -5) {};
+		\node [style=none] (41) at (-11.5, -5) {};
+		\node [style=none] (42) at (-11.5, -5) {};
+		\node [style=none] (43) at (-8.5, -5) {};
+		\node [style=bn] (44) at (-8.5, -5) {};
+		\node [style=none] (45) at (-8.5, -5) {};
+		\node [style=none] (46) at (-8.5, -5) {};
+		\node [style=none] (47) at (-8.5, -5) {};
+		\node [style=none] (48) at (-7.5, -5) {};
+		\node [style=bn] (49) at (-7.5, -5) {};
+		\node [style=none] (50) at (-7.5, -5) {};
+		\node [style=none] (51) at (-8.5, -3) {};
+		\node [style=none] (52) at (-7.5, -3) {};
+		\node [style=none] (85) at (-12.25, -4.25) {$X$};
+		\node [style=none] (87) at (-8, -3) {$X$};
+		\node [style=none] (88) at (-7, -3) {$X$};
+		\node [style=none] (91) at (-11.5, -5) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [bend left=45] (28.center) to (30.center);
+		\draw [bend left=45] (30.center) to (29.center);
+		\draw (32.center) to (33.center);
+		\draw (51.center) to (47.center);
+		\draw (52.center) to (50.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

@@ -1,0 +1,33 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (51) at (-9, -1) {};
+		\node [style=none] (52) at (-9, 3) {};
+		\node [style=none] (53) at (-9.5, -1) {$X$};
+		\node [style=none] (56) at (-7.5, 1) {$\leq$};
+		\node [style=none] (66) at (-3, -1) {};
+		\node [style=none] (67) at (-3, 3) {};
+		\node [style=none] (68) at (-3.5, 1) {$X$};
+		\node [style=none] (74) at (-6, 3) {};
+		\node [style=none] (75) at (-6, -1) {};
+		\node [style=none] (76) at (-6.5, -1) {$X$};
+		\node [style=none] (79) at (-2, 1) {$\leq$};
+		\node [style=bn] (80) at (-6, 0.75) {};
+		\node [style=bn] (81) at (-6, 1.25) {};
+		\node [style=bn] (82) at (-3, -1) {};
+		\node [style=bn] (83) at (-3, 3) {};
+		\node [style=none] (84) at (0, 2.5) {};
+		\node [style=none] (85) at (0, -0.5) {};
+		\node [style=none] (86) at (3, -0.5) {};
+		\node [style=none] (87) at (3, 2.5) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (52.center) to (51.center);
+		\draw (67.center) to (66.center);
+		\draw (81) to (74.center);
+		\draw (80) to (75.center);
+		\draw [style=ds] (84.center) to (85.center);
+		\draw [style=ds] (85.center) to (86.center);
+		\draw [style=ds] (86.center) to (87.center);
+		\draw [style=ds] (87.center) to (84.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

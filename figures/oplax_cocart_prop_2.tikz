@@ -1,0 +1,34 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (0) at (-8, 4) {};
+		\node [style=none] (1) at (-7.5, 4) {$Y$};
+		\node [style=bn] (2) at (-8, -1) {};
+		\node [style=box] (3) at (-8, 1) {$f$};
+		\node [style=none] (12) at (-6.5, 1) {$\le$};
+		\node [style=none] (13) at (-5, 4) {};
+		\node [style=none] (14) at (-5, 0.25) {};
+		\node [style=bn] (16) at (-5, 1.75) {};
+		\node [style=bn] (17) at (-5, 2.25) {};
+		\node [style=bn] (18) at (-5, -1) {};
+		\node [style=box] (19) at (-5, 0.25) {$f$};
+		\node [style=none] (20) at (-3.5, 1) {$\le$};
+		\node [style=none] (21) at (-2, 4) {};
+		\node [style=none] (22) at (-2, -1) {};
+		\node [style=bn] (23) at (-2, 1.75) {};
+		\node [style=bn] (24) at (-2, 2.25) {};
+		\node [style=bn] (25) at (-2, -1) {};
+		\node [style=none] (27) at (1, 4) {};
+		\node [style=bn] (28) at (1, -1) {};
+		\node [style=none] (29) at (-0.5, 1) {$\leq$};
+		\node [style=none] (30) at (-1.5, 0.25) {$X$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (0.center) to (2);
+		\draw (17) to (13.center);
+		\draw (16) to (14.center);
+		\draw (19) to (18);
+		\draw (24) to (21.center);
+		\draw (23) to (22.center);
+		\draw (28) to (27.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

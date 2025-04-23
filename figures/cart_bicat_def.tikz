@@ -1,0 +1,48 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (13) at (-5.5, -1) {$X$};
+		\node [style=none] (14) at (-5, -1) {};
+		\node [style=bn] (15) at (-5, 0) {};
+		\node [style=none] (16) at (-6, 1) {};
+		\node [style=none] (17) at (-4, 1) {};
+		\node [style=none] (23) at (-5, 2) {};
+		\node [style=none] (51) at (-9, -1) {};
+		\node [style=none] (52) at (-9, 3) {};
+		\node [style=none] (53) at (-9.5, -1) {$X$};
+		\node [style=bn] (54) at (-5, 2) {};
+		\node [style=none] (55) at (-5, 3) {};
+		\node [style=none] (56) at (-7.5, 1) {$\leq$};
+		\node [style=none] (58) at (0, 0) {};
+		\node [style=bn] (59) at (0, 2) {};
+		\node [style=none] (60) at (-1, 3) {};
+		\node [style=none] (61) at (1, 3) {};
+		\node [style=none] (62) at (-1, -1) {};
+		\node [style=none] (63) at (1, -1) {};
+		\node [style=none] (64) at (0, 0) {};
+		\node [style=bn] (65) at (0, 0) {};
+		\node [style=none] (66) at (3.75, -1) {};
+		\node [style=none] (67) at (3.75, 3) {};
+		\node [style=none] (68) at (3.25, -1) {$X$};
+		\node [style=none] (69) at (5.25, -1) {};
+		\node [style=none] (70) at (5.25, 3) {};
+		\node [style=none] (71) at (4.75, -1) {$X$};
+		\node [style=none] (72) at (2, 1) {$\leq$};
+		\node [style=none] (73) at (-0.5, 1) {$X$};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (15) to (14.center);
+		\draw [in=165, out=-90] (16.center) to (15);
+		\draw [in=270, out=15] (15) to (17.center);
+		\draw [bend left=45] (16.center) to (23.center);
+		\draw [bend left=45] (23.center) to (17.center);
+		\draw (52.center) to (51.center);
+		\draw (55.center) to (54);
+		\draw (59) to (58.center);
+		\draw [in=165, out=-90] (60.center) to (59);
+		\draw [in=270, out=15] (59) to (61.center);
+		\draw [bend left=45] (62.center) to (64.center);
+		\draw [bend left=45] (64.center) to (63.center);
+		\draw (67.center) to (66.center);
+		\draw (70.center) to (69.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

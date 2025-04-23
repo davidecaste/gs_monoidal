@@ -1,0 +1,43 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=none] (7) at (11.25, -3) {};
+		\node [style=none] (8) at (10.75, -3) {$X$};
+		\node [style=none] (28) at (8.5, -3) {};
+		\node [style=none] (29) at (8, -3) {$X$};
+		\node [style=box] (31) at (11.25, -2) {$f$};
+		\node [style=none] (32) at (9.75, -1) {$\leq$};
+		\node [style=none] (33) at (8.5, 1) {};
+		\node [style=none] (35) at (11.25, 1) {};
+		\node [style=box] (37) at (11.25, -0.25) {$f^*$};
+		\node [style=none] (38) at (13.5, -1) {$\Rightarrow$};
+		\node [style=none] (39) at (17.75, -3) {};
+		\node [style=none] (40) at (17.25, -3) {$X$};
+		\node [style=none] (41) at (15.5, -3) {};
+		\node [style=none] (42) at (15, -3) {$X$};
+		\node [style=box] (43) at (17.75, -2) {$f$};
+		\node [style=none] (44) at (16.5, -1) {$\leq$};
+		\node [style=none] (45) at (15.5, 1) {};
+		\node [style=none] (46) at (17.75, 1) {};
+		\node [style=box] (47) at (17.75, -0.25) {$f^*$};
+		\node [style=bn] (48) at (15.5, 1) {};
+		\node [style=bn] (49) at (17.75, 1) {};
+		\node [style=none] (50) at (19, -1) {$\leq$};
+		\node [style=none] (51) at (20.25, -3) {};
+		\node [style=none] (52) at (19.75, -3) {$X$};
+		\node [style=box] (53) at (20.25, -1) {$f$};
+		\node [style=none] (54) at (20.25, 1) {};
+		\node [style=bn] (56) at (20.25, 1) {};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (33.center) to (28.center);
+		\draw (31) to (7.center);
+		\draw (35.center) to (37);
+		\draw (31) to (37);
+		\draw (45.center) to (41.center);
+		\draw (43) to (39.center);
+		\draw (46.center) to (47);
+		\draw (43) to (47);
+		\draw (53) to (51.center);
+		\draw (56) to (53);
+	\end{pgfonlayer}
+\end{tikzpicture}
