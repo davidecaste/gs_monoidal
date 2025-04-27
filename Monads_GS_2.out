@@ -1,0 +1,20 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{A taxonomy of gs-monoidal categories}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Share categories}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Categories with garbage}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Gs-monoidal categories}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{Recurring examples: spans and \(weighted\) relations}{section.2}% 6
+\BOOKMARK [3][-]{subsubsection.2.4.1}{From spans to relations}{subsection.2.4}% 7
+\BOOKMARK [3][-]{subsubsection.2.4.2}{And now, weighted relations}{subsection.2.4}% 8
+\BOOKMARK [2][-]{subsection.2.5}{On duality}{section.2}% 9
+\BOOKMARK [2][-]{subsection.2.6}{On Markov and restriction categories}{section.2}% 10
+\BOOKMARK [1][-]{section.3}{A taxonomy of Kleisli categories}{}% 11
+\BOOKMARK [1][-]{section.4}{A taxonomy of the enriched context}{}% 12
+\BOOKMARK [2][-]{subsection.4.1}{Order-enriched categories}{section.4}% 13
+\BOOKMARK [2][-]{subsection.4.2}{An enriched taxonomy of Kleisli categories}{section.4}% 14
+\BOOKMARK [2][-]{subsection.4.3}{Some properties of maps}{section.4}% 15
+\BOOKMARK [2][-]{subsection.4.4}{Cartesian bicategories through a gs-monoidal lens}{section.4}% 16
+\BOOKMARK [1][-]{section.5}{Conclusions and further work}{}% 17
+\BOOKMARK [1][-]{Appendix.a.A}{Lax monoidal functors}{}% 18
+\BOOKMARK [1][-]{Appendix.a.B}{Restriction categories}{}% 19
+\BOOKMARK [1][-]{Appendix.a.C}{More on cogs-monoidal categories}{}% 20
