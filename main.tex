@@ -1,0 +1,642 @@
+\documentclass[a4paper,UKenglish,cleveref,pdftex,thm-restate,numberwithinsect]{lipics-v2021}
+\newif\ifreport
+%\reporttrue 
+\reportfalse 
+
+% full includes some additional material
+\newif\iffull
+%\fulltrue
+\fullfalse
+
+% additional text
+\iffull
+\newcommand{\full}[1]{{color{blue}#1}}
+%\newcommand{\short}[1]{}
+\else 
+\newcommand{\full}[1]{}
+%\newcommand{\short}[1]{#1}  xfl
+\fi
+
+\nolinenumbers %uncomment to disable line numbering
+
+\ifreport
+\nolinenumbers %uncomment to disable line numbering
+\hideLIPIcs  %uncomment to remove references to LIPIcs series (logo, DOI, ...), e.g. when preparing a pre-final version to be uploaded to arXiv or another public repository
+\else
+\relatedversion{An extended version is available at \url{https://arxiv.org/abs/2407.06181}.} %optional, e.g. full version hosted on arXiv, HAL, or other respository/website
+%\relatedversion{A full version of the paper is available at \url{...}.}
+\fi
+
+\bibliographystyle{abbrv}% the mandatory bibstyle
+
+
+
+\usepackage{hyperref}
+\usepackage[disable,%
+textsize=tiny]{todonotes}
+%\usepackage{etex}
+\usepackage[all]{xy}
+\SelectTips{cm}{}
+% derivations and labels
+\usepackage{proof}
+\newcommand{\lab}[1]{\ensuremath{\mathsf{{#1}}}}
+\newcommand{\slab}[1]{\ensuremath{\scriptstyle{\mathsf{{#1}}}}}
+\usepackage{wrapfig}
+
+
+%frecce
+\newcommand{\mor}{\mathsf{Mor}}
+\newcommand{\mon}{\mathsf{Mono}}
+\newcommand{\reg}{\mathsf{Reg}}
+
+% ``boxed'' \infer command
+\newcommand{\binfer}[3][]{
+	\mbox{\infer[#1]{#2}{#3}}}
+
+% Command for labels on the left side of the rule
+%       \inferL{<name>}{<post>}{<pre>}
+% generates:
+%             <pre>
+%      <name> ------
+%             <post>
+%
+\newlength{\myheight}
+\newcommand{\inferL}[3]
+{\settoheight{\myheight}{\mbox{${#2}$}}
+	\raisebox{\myheight}{{#1}}
+	\makebox[1mm]{}
+	\mbox{\infer{#2}{#3}}
+}
+
+\usepackage{amssymb,graphicx,epsfig,color}
+%\usepackage[scriptsize]{subfigure}
+\usepackage{subcaption}
+\usepackage{wrapfig}
+
+% re-stating 
+%\usepackage{thm-restate}
+
+% showing labels
+%\usepackage[inline]{showlabels}
+
+\usepackage{pgf}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{arrows,shapes,snakes,automata,backgrounds,petri,fit,positioning,calc}
+\tikzstyle{node}=[circle, draw=black, minimum size=1mm, inner sep=1.5pt, font=\tiny]
+
+\tikzstyle{trans}=[font=\scriptsize]
+\tikzstyle{lab}=[font=\small]
+\tikzset{
+	coloredge/.style={
+		->,
+		color=red
+		%densely dotted
+	}
+}
+
+\tikzset{
+	colorloop/.style={
+		loop,
+		color=red
+		%densely dotted
+	}
+}
+
+\tikzcdset{
+	perm/.style={
+		shorten >=-1mm, shorten <=-1mm,
+		-,
+		% dotted
+	}
+}
+
+
+\newcommand{\pgfBox}{
+	\begin{pgfonlayer}{background} 
+		\fill[blue!2,thick,draw=black!50,rounded corners,inner sep=3mm] ([xshift=-1.5pt,yshift=-1.5pt]current bounding box.south west) rectangle ([xshift=1.5pt,yshift=1.5pt]current bounding box.north east);
+	\end{pgfonlayer}
+}
+\usepackage{scalerel}
+\newcommand{\smallmin}{\scaleobj{0.6}{-}}
+\newcommand{\Deltamin}{\Delta^{\hspace{-1pt}\downarrow\hspace{-1pt}}}
+\newcommand{\Rrel}[1]   {\stackrel{{#1}}{\Longrightarrow}}
+\newcommand{\oa}{\overline a}
+\newcommand{\ob}{\overline b}
+\newcommand{\oc}{\overline c}
+\newcommand{\od}{\overline d}
+\newcommand{\rec}{\emph{rec}}
+\newcommand{\fn}[1]{{\mathtt{fn}}(#1)}
+%\usepackage{latexsym}
+\usepackage{stmaryrd}
+\def\encodep#1{\llfloor#1\rrfloor}
+
+\newcommand{\cat}[1]{\ensuremath{\mathbf{#1}}}
+
+\newcommand{\dpo}{\textsc{dpo}}
+
+% base classes of categories for adhesive and quasi adhesive case
+\newcommand{\bAdh}{\ensuremath{\mathbb{B}}}
+\newcommand{\bQAdh}{\ensuremath{\mathbb{QB}}}
+
+%from pawel
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{xspace}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{cite}
+\usepackage{float}
+\usepackage{fancybox}
+\usepackage{proof-at-the-end}
+\usepackage{cleveref}
+
+
+%\spnewtheorem*{notation}{Notation}{\bfseries}{\rmfamily}
+
+%%%%%%%% MATHEMATICAL NOTATION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%symbol for natural numbers
+\newcommand{\nat}{\ensuremath{\mathbb{N}}}
+
+% finite subset
+\newcommand{\sfin}{\ensuremath{\subseteq_{\mathit{fin}}}}
+
+% flattening of a multiset
+\newcommand{\flt}[1]{\ensuremath{[\![{#1}]\!]}}
+
+% compact elements
+\newcommand{\compact}[1]{\ensuremath{\mathop{\mathsf{K}({#1})}}}
+
+% principal ideal
+\newcommand{\principal}[1]{\ensuremath{\mathop{\downarrow\!{#1}}}}
+
+% ideal completion
+\newcommand{\ideal}[1]{\ensuremath{\mathsf{Idl}({#1})}}
+
+% complete prime elements
+\newcommand{\pr}[1]{\ensuremath{\mathop{\mathit{pr}({#1})}}}
+\newcommand{\wpr}[1]{\ensuremath{\mathop{\mathit{wpr}({#1})}}}
+
+% irreducible elements
+\newcommand{\ir}[1]{\ensuremath{\mathop{\mathit{ir}({#1})}}}
+
+% difference of irreducible elements
+\newcommand{\diff}[2]{\ensuremath{\delta({#1},{#2})}}
+
+% immediate precedence
+
+% abbreviation for event structure
+% \newcommand{\esabbr}{event structure}
+\newcommand{\esabbr}{\textsc{es}}
+\newcommand{\esnabbr}{\textsc{esnb}}
+\newcommand{\esnmabbr}{\textsc{esn}}
+\newcommand{\eseqabbr}{\textsc{epes}}
+
+% predecessor of an irreducible
+\newcommand{\pred}[1]{\ensuremath{\mathit{p}({#1})}}
+
+% irreducible elements in es domains
+\newcommand{\esir}[2]{\ensuremath{\langle{#1}, {#2}\rangle}}
+
+% equivalence classes [of irreducibles]
+\newcommand{\eqclass}[2][]{\ensuremath{[{#2}]_{\scriptscriptstyle {#1}}}}
+% union of the equivalence classes of the elements in a set
+\newcommand{\eqclasscup}[2]{\ensuremath{{#2}_{\scriptscriptstyle {#1}}}}
+
+\newcommand{\eqclassir}[1]{\ensuremath{\eqclass[\leftrightarrow^*]{#1}}}
+
+% quotient of set wrt a relation
+\newcommand{\quotient}[2]{\ensuremath{{#1}_{\scriptscriptstyle {#2}}}}
+
+% category of event structures 
+\newcommand{\es}{\ensuremath{\mathsf{ES}}}
+% category of stable event structures 
+\newcommand{\ses}{\ensuremath{\mathsf{sES}}}
+% category of prime event structures 
+\newcommand{\pes}{\ensuremath{\mathsf{pES}}}
+% category of prime event structures with equivalence
+\newcommand{\epes}{\ensuremath{\mathsf{epES}}}
+
+% category of connected event structures 
+\newcommand{\ces}{\ensuremath{\mathsf{cES}}}
+
+% category of weak prime algebraic domains domains 
+\newcommand{\WDom}{\ensuremath{\mathsf{wDom}}}
+% category of domains
+\newcommand{\Dom}{\ensuremath{\mathsf{Dom}}}
+% category of prime algebraic domains
+\newcommand{\PDom}{\ensuremath{\mathsf{pDom}}}
+
+
+%%%%% NON BINARY CONFLICT
+
+% category of event structures 
+\newcommand{\esn}{\ensuremath{\mathsf{ES_{nb}}}}
+% category of stable event structures 
+\newcommand{\sesn}{\ensuremath{\mathsf{sES_n}}}
+
+% category of connected event structures 
+\newcommand{\cesn}{\ensuremath{\mathsf{cES_{nb}}}}
+
+% category of prime event structures 
+\newcommand{\pesn}{\ensuremath{\mathsf{pES_n}}}
+
+% category of fusion domains 
+\newcommand{\WDomb}{\ensuremath{\mathsf{wDom_b}}}
+% category of domains
+\newcommand{\Domb}{\ensuremath{\mathsf{Dom_b}}}
+% category of prime algebraic domains
+\newcommand{\PDomb}{\ensuremath{\mathsf{pDom_b}}}
+
+%%%%% END NON BINARY CONFLICT
+
+
+% slice category
+\newcommand{\slice}[2]{\ensuremath{({#1} \downarrow {#2})}}
+
+
+% event structure for a domain
+\newcommand{\zev}[0]{\ensuremath{\mathcal{E}}}
+\newcommand{\ev}[1]{\ensuremath{\zev({#1})}}
+
+% from general to connected event structures
+\newcommand{\zconnes}[0]{\ensuremath{\mathcal{C}}}
+\newcommand{\connes}[1]{\ensuremath{\zconnes({#1})}}
+% and inclusion
+\newcommand{\zinces}[0]{\ensuremath{\mathcal{I}}}
+\newcommand{\inces}[1]{\ensuremath{\zinces({#1})}}
+
+
+% stable version
+\newcommand{\zsev}[0]{\ensuremath{\mathcal{E}_S}}
+\newcommand{\sev}[1]{\ensuremath{\zsev({#1})}}
+
+% with equivalence
+\newcommand{\zeveq}[0]{\ensuremath{\mathcal{E}_{eq}}}
+\newcommand{\eveq}[1]{\ensuremath{\zeveq({#1})}}
+
+% es with equivalence to es and vice
+\newcommand{\zfuse}[0]{\ensuremath{\mathcal{M}}}
+\newcommand{\fuse}[1]{\ensuremath{\zfuse({#1})}}
+\newcommand{\zunf}[0]{\ensuremath{\zunf}}
+\newcommand{\unf}[1]{\ensuremath{\mathcal{U}({#1})}}
+
+
+
+% Winskel/Droste version
+\newcommand{\zevwd}[0]{\ensuremath{\mathcal{E}_{wd}}}
+\newcommand{\evwd}[1]{\ensuremath{\zevwd({#1})}}
+
+
+
+
+% configurations of an event structure
+\newcommand{\conf}[1]{\ensuremath{\mathit{Conf}({#1})}}
+% finite configurations
+\newcommand{\conff}[1]{\ensuremath{\mathit{Conf_F}({#1})}}
+
+% product of the sets of minimal enablinsg
+\newcommand{\pmin}[1]{\ensuremath{U_{#1}}}
+
+% connectectedness of minimal enablinsg
+\newcommand{\conn}[1]{\ensuremath{\stackrel{#1}{\frown}}}
+
+
+% domain for an event structure or graph grammar
+\newcommand{\zdom}[0]{\ensuremath{\mathcal{D}}}
+\newcommand{\dom}[1]{\ensuremath{\zdom({#1})}}
+
+
+\newcommand{\zdomeq}[0]{\ensuremath{\mathcal{D}_{eq}}}
+\newcommand{\domeq}[1]{\ensuremath{\zdomeq({#1})}}
+
+
+% partial order for a graph grammar
+\newcommand{\poset}[1]{\ensuremath{\mathcal{P}({#1})}}
+
+% stable version
+\newcommand{\pdom}[1]{\ensuremath{\mathcal{D}_S({#1})}}
+\newcommand{\ppdom}[0]{\ensuremath{\mathcal{D}_S}}
+
+
+% powerset
+\newcommand{\Pow}[1]{\ensuremath{\mathbf{2}^{#1}}}
+
+% powerset of finite subsets
+\newcommand{\Powfin}[1]{\ensuremath{\mathbf{2}_\mathit{fin}^{#1}}}
+
+% powerset of subsets of cardinality <= 1
+\newcommand{\Powone}[1]{\ensuremath{\mathbf{2}_1^{#1}}}
+
+% integer interval
+\newcommand{\interval}[2][1]{\ensuremath{[{#1},{#2}]}}
+
+% domain interval
+\newcommand{\dint}[2]{\ensuremath{[{#1},{#2}]}}
+
+% set of intervals
+\newcommand{\IntSet}[1]{\ensuremath{\mathop{\mathit{Int}({#1})}}}
+
+% intervals to irreducibles and vice
+\newcommand{\inir}{\ensuremath{\mathop{\mathit{\zeta}}}}
+\newcommand{\irin}{\ensuremath{\mathop{\mathit{\iota}}}}
+
+% permutations
+\newcommand{\perm}{\sigma}
+
+% causes
+\newcommand{\causes}[1]{\ensuremath{\lfloor {#1})}}
+
+%%% GRAPH GRAMMARS
+
+
+\newcommand{\Abs}[1]{\ensuremath{\mathsf{Abs}({#1})}}
+\newcommand{\tr}[1]{\ensuremath{\mathsf{Tr}({#1})}}
+% fusion safe traces
+\newcommand{\trs}[1]{\ensuremath{\mathsf{Tr}_s({#1})}}
+%\newcommand{\graph}{\ensuremath{\mathsf{Graph}}}
+\newcommand{\tgraph}[1]{\ensuremath{\mathsf{Graph}_{#1}}}
+\newcommand{\can}[1]{\ensuremath{\mathsf{C}({#1})}}
+% source and target of a derivation
+\newcommand{\source}[1]{\ensuremath{\mathsf{s}({#1})}}
+\newcommand{\target}[1]{\ensuremath{\mathsf{t}({#1})}}
+\newcommand{\col}[1]{\ensuremath{\mathsf{col}({#1})}}
+
+% left decorated trace
+\newcommand{\ltrace}[1]{\ensuremath{\langle {#1}\rangle_c}}
+
+\newcommand{\bx}[1]{\phantom{\big(}#1{\phantom{\big)}}}
+\newcommand{\bxx}[1]{\,#1\,}
+\newcommand{\cycl}[1]{\ensuremath{\mbox{\textcircled{\scriptsize{$#1$}}}}}
+\renewcommand{\iff}{\ensuremath{\Leftrightarrow}}
+
+%%%%GENERAL CATEGORICAL NOTATION
+
+\newcommand{\gph}[1]{\textbf{\textup{{#1}-Graph}}}
+
+\newcommand{\dph}{\mathsf{dph}}
+%identitÃ 
+\newcommand{\id}[1]{\mathsf{id}_{#1}}
+%codominio
+\newcommand{\cod}[1]{\mathsf{cod}({#1})}
+%Variabili categorie
+\def\A{\textbf {\textup{A}}}
+%mono
+\newcommand{\mto}[0]{\scalebox{1}{$\rightarrowtail$}}
+
+
+\newcommand{\sk}{\mathsf{sk}_{\X}}
+
+
+\def\R{\mathsf{R}}
+\def\B{\textbf {\textup{B}}}
+\def\C{\textbf {\textup{C}}}
+\def\D{\textbf {\textup{D}}}
+\def\X{\textbf {\textup{X}}}
+\def\Y{\textbf {\textup{Y}}}
+\def\G{\textbf {\textup{G}}}
+
+\newcommand{\ske}{\mathsf{sk}(\X)}
+\renewcommand{\P}{\textbf {\textup{P}}}
+
+%\derivazioni
+
+\newcommand{\dder}[1]{\mathscr{#1}}
+\newcommand{\sder}[2]{S_{i_1,i_2}(\mathscr{#1}, \mathscr{#2})}
+\newcommand{\der}[1]{\underline{\dder{#1}}}
+\def\dpo{\mathsf{C}^{\X}_R}
+\def\gpo{\mathsf{G}^{\X}_R}
+\def\dpi{[\mathsf{C}]^{\X}_R}
+\def\gpi{[\mathsf{G}]^{\X}_R}
+
+\newcommand{\ider}[1]{\mathscr{I}_{#1}}
+
+%categorie
+\def\Set{\textbf {\textup{Set}}}
+
+%comma
+\newcommand{\comma}[2]{#1\hspace{1pt} {\downarrow}\hspace{1pt} #2}
+\newcommand{\cma}[2]{\mathcal{#1}\hspace{1pt} {\downarrow}\hspace{1pt} \mathcal{#2}}
+
+%derivazioni
+\newcommand{\lpro}{\langle \hspace{-1.85pt}[}
+\newcommand{\rpro}{]\hspace{-1.85pt}\rangle}
+\newcommand{\tpro}[1]{\lpro \der{#1}\rpro}
+\newcommand{\tproi}[2]{\lpro \der{#1}_{#2}\rpro}
+\newcommand{\lgh}[0]{\mathsf{lg}}
+
+%%% NEW
+
+\usepackage{xparse}
+
+% inversions
+\newcommand{\inv}[1]{\mathsf{inv}({#1})}
+\newcommand{\tnv}[1]{\mathsf{tnv}({#1})}
+
+
+%% sequential independence
+%\newcommand{\seqind}{\ensuremath{\updownarrow}}
+
+
+% direct shift
+\newcommand{\shift}[1]{\ensuremath{\mathrel{{\leftrightsquigarrow}_{#1}}}}
+
+% shift equivalence
+\newcommand{\shifteq}[1][]{\ensuremath{\mathrel{{\equiv}^\mathit{sh}_{#1}}}}
+
+% transp{source}[target]: if target not specified source+1
+\NewDocumentCommand{\transp}{m o}{%
+	\ensuremath{({#1},%
+		\IfNoValueTF{#2}%
+		{{#1}+1}%
+		{#2}%
+		)}
+}
+
+\NewDocumentCommand{\mycommand}{o}{%
+	% <code>
+	\IfNoValueTF{#1}
+	{code when no optional argument is passed}
+	{code when the optional argument #1 is present}%
+	% <code>
+}
+% interchange
+\newcommand{\IC}[1]{\ensuremath{\mathit{IC}({#1})}}
+
+%%%%% Ambienti matematici  %%%%%%
+%\newtheorem{theorem}{Theorem}[section]
+%\newtheorem{proposition}[theorem]{Proposition}
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newtheorem{corollary}[theorem]{Corollary}
+
+%\theoremstyle{definition}
+%\newtheorem{definition}[theorem]{Definition}
+\newtheorem*{notation}{Notation}
+%\newtheorem{remark}[theorem]{Remark}
+%\newtheorem{example}[theorem]{Example}
+
+
+% commands for restructuring
+\newcommand{\rem}[2]{{\color{blue}#1}{\color{red}#2}}
+\renewcommand{\rem}[2]{}
+
+
+% fake author for anonymous submission
+%\author{Alan Turing} 
+%{Department of Mathematics, Somewhere}
+%{alan@turing.com}{}{}
+
+
+\author{Davide Castelnovo}
+{Department of Computer Science, University of Pisa, Italy}
+{castelnovod@gmail.com}
+{https://orcid.org/0000-0002-5926-5615}{}
+
+\author{Fabio Gadducci}
+{Department of Computer Science, University of Pisa, Italy}
+{fabio.gadducci@unipi.it}
+{https://orcid.org/0000-0003-0690-3051}{}
+
+
+\authorrunning{D.~Castelnovo, F.~Gadducci}
+%
+\Copyright{Davide Castelnovo, Fabio Gadducci}
+%
+\ccsdesc[500]{Theory of Computation~Models of computation}
+\ccsdesc[500]{Theory of Computation~Semantics and reasoning}
+%
+\keywords{
+	Adhesive categories, double-pushout rewriting, left-linear rules, switch equivalence, local Church-Rosser property.
+}
+
+\funding{The research has been partially supported by the EuropeanUnion - NextGenerationEU under the National Recovery and Resilience Plan (NRRP) - Call PRIN 2022 PNRR - Project P2022HXNSC ``Resource Awareness in Programming: Algebra, Rewriting, and Analysis'', by the Italian MUR - Call PRIN 2022 - Project 20228KXFN2 
+	``Spatio-Temporal Enhancement of Neural nets for Deeply
+	Hierarchical Automatised Logic'' and by the University of Pisa - Call PRA 2022 - Project 2022\_99 ``Formal Methods for the Healthcare Domain based on Spatial Information''.}
+
+\EventEditors{Rupak Majumdar and Alexandra Silva}
+\EventNoEds{2}
+\EventLongTitle{35th International Conference on Concurrency Theory (CONCUR 2024)}
+\EventShortTitle{CONCUR 2024}
+\EventAcronym{CONCUR}
+\EventYear{2024}
+\EventDate{Septembre 9--13, 2024}
+\EventLocation{Calgary, Canada}
+\EventLogo{}
+\SeriesVolume{311}
+\ArticleNo{6}
+
+\title{Notes on various kind of free gs-monoidal categories}
+
+
+\begin{document}
+	\maketitle
+\begin{abstract}
+	contenuto...
+\end{abstract}	
+
+\section{Introduction}
+
+
+\section{Symmetric monoidal categories}
+\subsection{Gs-monoidal categories}
+
+
+
+\section{Hypergraphs}
+
+\subsection{Categories internal to }
+
+\subsubsection{funtore qui dentro}
+
+\section{Building (2-)left adjoints}
+
+\subsection{PROPs with labelled hypergraphs as arrows}
+
+\subsubsection{DPOI rewriting}
+\subsection{Some universal properties}
+
+\subsubsection{1-dimensional universal properties}
+
+\subsubsection{2-dimensional universal properties}
+
+\subsection{Monadicity results}
+riusciamo a mettere risultati di monadicità?
+\section{Conclusions}
+	
+\bibliography{bibliog.bib}
+\appendix
+
+\section{Internal categories}
+
+This appendix is devoted to a quick recall of the definition of internal categories the main account are \cite{borceux1994handbook1,maclane2012sheaves,mac2013categories,jacobs1999categorical}.
+
+
+\begin{definition}
+	Let $\X$ be a category with pullbacks. An \emph{internal category} $\mathcal{C}$ in $\X$ is a $6$-uple $(O_{\mathcal{C}}, A_{\mathcal{C}}, s_{\mathcal{C}}, t_{\mathcal{C}},e_{\mathcal{C}},  c_{\mathcal{C}})$ given by
+	\begin{itemize}
+		\item two objects $O_{\mathcal{C}}$ and $A_{\mathcal{C}}$ called, respectively, the \emph{object of objects} and \emph{object of arrows} ;
+		\item two \emph{source} and \emph{target} arrows $s_{\mathcal{C}}, t_{\mathcal{C}}\colon A_{\mathcal{C}}\rightrightarrows O_{\mathcal{C}}$;
+		\item an \emph{identity arrow} $e_{\mathcal{C}}\colon O_{\mathcal{C}}\to A_{\mathcal{C}}$;
+		\item a \emph{composition arrow} $P\to A_{\mathcal{C}}$, where $P$ is the vertex of a pullbacks square as the one below.
+		\[\xymatrix{P \ar[r]^{p_1} \ar[d]_{p_0} &A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}} \\ A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}}  &O_{\mathcal{C}} }\]
+	\end{itemize}
+
+These data are required to satisfy the four axioms listed below.
+\begin{enumerate}
+	\item The following diagram commutes:
+	\[\xymatrix{& O_{\mathcal{C}} \ar[d]_{e_{\mathcal{C}}}\ar[dr]^{\id{O_{\mathcal{C}}}} \ar[dl]_{\id{O_{\mathcal{C}}}}\\ O_{\mathcal{C}} & A_{\mathcal{C}}  \ar[l]^{t_{\mathcal{C}}}\ar[r]_{s_{\mathcal{C}}}& O_{\mathcal{C}}}\]
+	\item The following two squares commute:
+	\[\xymatrix{P \ar[r]^{c_{\mathcal{C}}} \ar[d]_{p_0}& A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}} &P \ar[r]^{c_{\mathcal{C}}} \ar[d]_{p_1}& A_{\mathcal{C}} \ar[d]^{t_{\mathcal{C}}} \\ A_{\mathcal{C}} \ar[r]_{s_{\mathcal{C}}}& O_{\mathcal{C}} & A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}}& O_{\mathcal{C}} }\]
+		\item The following diagram commute:
+	\[\xymatrix{A_{\mathcal{C}} \ar[dr]_{\id{A_{\mathcal{C}}}}\ar[r]^{\phi}& P \ar[d]_{c}&A_{\mathcal{C}} \ar[l]_{\phi'} \ar[dl]^{\id{A_{\mathcal{C}}}} \\ & A_{\mathcal{C}}}\]
+	where $\phi, \phi'\colon A_{\mathcal{C}}\rightrightarrows P$ are the arrows defined by the two diagrams below, whose solid parts commute by the first axiom;
+	\[\xymatrix{A_{\mathcal{C}} \ar@/_.3cm/[ddr]_{\id{A_{\mathcal{C}}}} \ar[r]^{t_{\mathcal{C}}}\ar@{.>}[dr]^{\phi} & O_{\mathcal{C}} \ar[dr]^{e_{\mathcal{C}}}  &&A_{\mathcal{C}} \ar@/^.3cm/[drr]^{\id{A_{\mathcal{C}}}} \ar[d]_{s_{\mathcal{C}}}\ar@{.>}[dr]^{\phi'} \\ & P \ar[r]^{p_1} \ar[d]_{p_0}& A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}} &  O_{\mathcal{C}} \ar[dr]_{e_{\mathcal{C}}} & P \ar[r]^{p_1} \ar[d]_{p_0}& A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}} \\ & A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}}& O_{\mathcal{C}} & &A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}}& O_{\mathcal{C}} }\]
+
+\item Let us consider the following two pullback squares:
+	\[\xymatrix{Q \ar[rr]^{q_1} \ar[d]_{q_0} & & A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}}& Q' \ar[rr]^{q'_1} \ar[d]_{q'_0} &&  A_{\mathcal{C}} \ar[d]^{t_{\mathcal{C}}}\\ P   \ar[r]_{c} & A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}} & O_{\mathcal{C}} & P \ar[r]_{c}& A_{\mathcal{C}} \ar[r]_{s_{\mathcal{C}}} & O_{\mathcal{C}}}\]
+	
+	
+	
+	
+	then we ask for the commutativity of the diagram below.
+	
+\end{enumerate}
+\end{definition}
+
+
+\begin{proposition}
+duale, limiti 
+\end{proposition}
+\begin{proof}
+	contenuto...
+\end{proof}
+
+\begin{definition}
+	funtori
+\end{definition}
+
+\begin{definition}
+	nat transf
+\end{definition}
+	
+\begin{remark}
+	contenuto...
+\end{remark}	
+	
+	\begin{example}
+		contenuto...
+	\end{example}
+	
+\begin{proposition}
+	2 categoria
+\end{proposition}	
+	
+	\begin{proof}
+		contenuto...
+	\end{proof}
+	
+	\section{The $2$-dimensional Beck monadicity theorem}
+\end{document} 
