@@ -112,6 +112,8 @@ textsize=tiny]{todonotes}
 }
 
 
+\usepackage[usestackEOL]{stackengine}
+
 \newcommand{\pgfBox}{
 	\begin{pgfonlayer}{background} 
 		\fill[blue!2,thick,draw=black!50,rounded corners,inner sep=3mm] ([xshift=-1.5pt,yshift=-1.5pt]current bounding box.south west) rectangle ([xshift=1.5pt,yshift=1.5pt]current bounding box.north east);
@@ -132,6 +134,14 @@ textsize=tiny]{todonotes}
 \def\encodep#1{\llfloor#1\rrfloor}
 
 \newcommand{\cat}[1]{\ensuremath{\mathbf{#1}}}
+\newcommand{\cate}[1]{\mathbf{Cat}(\cat{#1})}
+\newcommand{\categ}{\mathbf{Cat}}
+
+\newcommand{\dcat}[1]{\ensuremath{\mathbf{\underline{#1}}}}
+\newcommand{\dcate}[1]{\underline{\mathbf{Cat}(\cat{#1})}}
+\newcommand{\dcateg}{\mathbf{\underline{Cat}}}
+
+
 
 \newcommand{\dpo}{\textsc{dpo}}
 
@@ -152,6 +162,56 @@ textsize=tiny]{todonotes}
 \usepackage{fancybox}
 \usepackage{proof-at-the-end}
 \usepackage{cleveref}
+
+
+%definizione funtori
+
+\DeclareFontFamily{U}{mathx}{\hyphenchar\font45}
+\DeclareFontShape{U}{mathx}{m}{n}{
+	<5> <6> <7> <8> <9> <10>
+	<10.95> <12> <14.4> <17.28> <20.74> <24.88>
+	mathx10
+}{}
+\DeclareSymbolFont{mathx}{U}{mathx}{m}{n}
+\DeclareFontSubstitution{U}{mathx}{m}{n}
+\DeclareMathAccent{\widecheck}{0}{mathx}{"71}
+\DeclareMathAccent{\wideparen}{0}{mathx}{"75}
+
+\def\cs#1{\texttt{\char`\\#1}}
+
+
+\DeclareFontFamily{OT1}{pzc}{}
+\DeclareFontShape{OT1}{pzc}{m}{it}{<-> s * [1.200] pzcmi7t}{}
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+	\newcommand\functorop[1][l]{\csname#1functor\endcsname}
+	\newcommand\lfunctorop[3]{%
+		\setbox0=\hbox{$#2$}%
+		\kern\wd0%
+		\ensurestackMath{\Centerstack[c]{#1\\ \mathllap{#2\;\,}\mathclap{\DownArrow}\\#3}}%
+	}		
+	\newcommand\rfunctorop[3]{%
+		\setbox0=\hbox{$#2$}%
+		\ensurestackMath{\Centerstack[c]{#1\\\mathclap{\UpArrow}\mathrlap{\,\;#2}\\#3}}%
+		\kern\wd0%
+	}
+	\newcommand\functoropmapsto{\mathrel{\ensurestackMath{\Centerstack[c]{\longmapsto\\ \\\longmapsto}}}}
+	\setstackgap{L}{1.3\normalbaselineskip}
+	\newcommand\UpArrow{\rotatebox[origin=c]{90}{$\longrightarrow$\,}}
+	\newcommand\DownArrow{\rotatebox[origin=c]{-90}{$\longrightarrow$\,}}
+	\newcommand\functor[1][l]{\csname#1functor\endcsname}
+	\newcommand\lfunctor[3]{%
+		\setbox0=\hbox{$#2$}%
+		\kern\wd0%
+		\ensurestackMath{\Centerstack[c]{#1\\ \mathllap{#2\;\,}\mathclap{\DownArrow}\\#3}}%
+	}
+	\newcommand\rfunctor[3]{%
+		\setbox0=\hbox{$#2$}%
+		\ensurestackMath{\Centerstack[c]{#1\\\mathclap{\DownArrow}\mathrlap{\,\;#2}\\#3}}%
+		\kern\wd0%
+	}
+	\newcommand\functormapsto{\mathrel{\ensurestackMath{\Centerstack[c]{\longmapsto\\ \\\longmapsto}}}}
+	\setstackgap{L}{1.3\normalbaselineskip}
+
 
 
 %\spnewtheorem*{notation}{Notation}{\bfseries}{\rmfamily}
@@ -399,6 +459,12 @@ textsize=tiny]{todonotes}
 \def\Y{\textbf {\textup{Y}}}
 \def\G{\textbf {\textup{G}}}
 
+
+\newcommand{\hyp}{\cat{Hyp}}
+\newcommand{\hyps}{\cat{Hyp}_{\Sigma}}
+\newcommand{\ari}[0]{\mathsf{ar}}
+\newcommand{\lgt}[0]{\mathsf{length}}
+
 \newcommand{\ske}{\mathsf{sk}(\X)}
 \renewcommand{\P}{\textbf {\textup{P}}}
 
@@ -537,6 +603,7 @@ textsize=tiny]{todonotes}
 	contenuto...
 \end{abstract}	
 
+\tableofcontents
 \section{Introduction}
 
 
@@ -547,7 +614,407 @@ textsize=tiny]{todonotes}
 
 \section{Hypergraphs}
 
-\subsection{Categories internal to }
+In this section we will move from the world of graphs to the one of \emph{hypergraphs} allowing an edge to join two arbitrary subsets of nodes. Even in this case,  leveraging the modularity provided by \cref{func}, it is possible to combine sufficiently adhesive categories of preorders or graphs (modelling the hierarchy between the edges) while retaining suitable adhesivity properties.  It is worth noticing that, beside hypergraphs or interfaces, this methodology can be extended easily to other settings such as Petri nets~(see \cite{ehrig1991parallelism}).
+
+
+We will start this section with the definition of (directed) hypergraph and we will see how label them with an algebraic signature. We will denote by $(-)^\star$ the monad $\cat{Set}\to \cat{Set}$ associated to the algebraic theory of monoids (i.e. the \emph{Kleene star}), moreover, given a set V, $e_V$ will be the empty word in $V^{\star}$ 
+
+
+\begin{definition}A \emph{hypergraph} is a 4-uple $\mathcal{G}:(E_\mathcal{G}, V_\mathcal{G}, s_\mathcal{G}, t_\mathcal{G})$ given by two sets $E_\mathcal{G}$ and $V_\mathcal{G}$, whose elements are called respectively \emph{hyperedges} and \emph{nodes}, pluse two \emph{source} and \emph{target}  functions $s_\mathcal{G}, t_\mathcal{G}:E_\mathcal{G}\rightrightarrows V_\mathcal{G}^\star$. A \emph{hypergraph morphism} $(E_\mathcal{G}, V_\mathcal{G}, s_\mathcal{G}, t_\mathcal{G})\to (E_\mathcal{H}, V_\mathcal{H}, s_\mathcal{H}, t_\mathcal{H})$ is a pair $(h,k)$ of functions $h:E_\mathcal{G}\to E_\mathcal{H}$, $k:V_\mathcal{G}\to V_\mathcal{H}$ such that the following diagrams commute.
+	\begin{center}
+		\begin{tikzpicture}
+			\node(A) at(2,0){$E_\mathcal{G}$};
+			\node(B) at (3.5,0){$V_\mathcal{G}^{\star}$};
+			\node(C) at(3.5,-1.5){$\mathcal{V_\mathcal{H}}^{\star}$};
+			\node(D) at (2,-1.5){$E_\mathcal{H}$};
+			\draw[->](A)--(B)node[pos=0.5, above]{$s_\mathcal{G}$};
+			\draw[->](D)--(C)node[pos=0.5, below]{$s_\mathcal{H}$};
+			\draw[->](A)--(D)node[pos=0.5, left]{$h$};
+			\draw[->](B)--(C)node[pos=0.5, right]{$k^{\star}$};
+			\node(A) at(5,0){$E_\mathcal{G}$};
+			\node(B) at (6.5,0){$V_\mathcal{G}^{\star}$};
+			\node(C) at(6.5,-1.5){$V_\mathcal{H}^{\star}$};
+			\node(D) at (5,-1.5){$E_\mathcal{H}$};
+			\draw[->](A)--(B)node[pos=0.5, above]{$t_\mathcal{G}$};
+			\draw[->](D)--(C)node[pos=0.5, below]{$t_\mathcal{H}$};
+			\draw[->](A)--(D)node[pos=0.5, left]{$h$};
+			\draw[->](B)--(C)node[pos=0.5, right]{$k^\star$};
+		\end{tikzpicture}
+	\end{center}	 
+	We define $\hyp$ to be the resulting category.
+\end{definition}
+
+\begin{notation}Given a set $X$, $\lgt_X:X^{\star}\to \mathbb{N}$ is the function which sends a word to its length. Notice that for every function $f:X\to Y$, the following diagram commutes
+	\begin{center}
+		\begin{tikzpicture}
+			\node(A) at(0,0){$X^\star$};
+			\node(B) at (3,0){$Y^\star$};
+			\node(C) at(1.5,-1.5){$\mathbb{N}$};
+			\draw[->](A)--(B)node[pos=0.5, above]{$f^\star$};
+			\draw[->](A)--(C)node[pos=0.5, left, xshift=-0.1cm]{$\lgt_X$};
+			\draw[->](B)--(C)node[pos=0.55, right, xshift=0.1cm]{$\lgt_Y$};	
+		\end{tikzpicture}
+	\end{center}
+	$e_X$ will denote the empty word in $X^\star$, moreover given $x\in X^\star\smallsetminus\{e_X\}$ and $1\leq n\leq \lgt_X(x)$, $x_n$ is the $n^\mathrm{th}$ letter of $x$.
+\end{notation}
+
+It is easy to see that this definition is exactly the definition of the comma category $\comma{\id{\Set}}{R}$ where $R:\Set\to \Set$ is the functor
+\begin{align*}
+	%\lfunctor{X}{f}{Y}
+\functormapsto
+%\rfunctor{X^\star \times X^\star}{f^\star \times f^\star }{Y^\star \times Y^{\star}}
+\end{align*}
+  
+We can also notice that the monoid monad $(-)^{\star}:\cat{Set}\to \cat{Set}$ is \emph{cartesian}, i.e. preserves all connected limits. This in turn rests upon the fact that the theory of monoids is a \emph{strongly regular theory} (see \cite[Sec. 3]{carboni1995connected}  and \cite[Ch.4]{leinster2004higher} for details). In particular it preserves pullbacks, thus we can apply \cref{comma,cor:mono}.
+
+\begin{proposition}\label{prop:hypadh}
+	$\hyp$ is an adhesive category.
+\end{proposition}
+
+\begin{remark}\label{rem:mono}
+	Preservation of connected limits implies that $(-)^\star$ sends monos to monos.
+\end{remark}
+
+\cref{prop:left} allows us to deduce immediately the following.
+
+\begin{proposition}\label{cor:left}
+	The forgetful functor $U_{\cat{Hyp}}:\hyp \to \cat{Set}$ which sends an hypergraph $\mathcal{G}$ to its set of nodes has a left adjoint $\Delta_{\hyp}$.
+\end{proposition}
+
+\begin{remark}Since the initial object of $\cat{Set}$ is the empty set,  $\Delta_{\hyp}(X)$ is the hypergraph which has $X$ as set of nodes and $\emptyset$ as set of hyperedges.
+\end{remark}
+
+
+Hypergraphs, as normal graphs, can be represented graphically. We will use dots to denote nodes and squares to denote hyperedges, the name of a node or of an hyperedge will be put near the corresponding dot or square. Sources and targets are represented by lines between dots and squares: the lines from the sources of an hyperedge will enter its square from the left, while the lines to the targets will exit it from the right, we will adopt the convention for which sources and targets are ordered from the top to the bottom. We can now illustrate this giving some example.
+\begin{example}Take $V$ to be be $\{v_1, v_2, v_3, v_4, v_5\}$ and $E$ to be $\{h_1, h_2, h_3\}$. Sources and targets are given by:
+	\[	s(h_1)=v_1v_2\quad
+	s(h_2)=v_3v_4\quad
+	s(h_3)=v_5 \qquad 
+	t(h_1)=v_3v_4\quad 
+	t(h_2)=v_5\quad
+	t(h_3)=e_V
+	\]	
+	We can draw the resulting $\mathcal{G}$ as follows:
+	\begin{center}\begin{tikzpicture}
+			\node[circle,fill=black,inner sep=0pt,minimum size=6pt,label=above:{$v_1$}] (A) at (0,0) {};
+			\node[circle,fill=black,inner sep=0pt,minimum size=6pt,label=above:{$v_2$}] (B) at (0,-1.5) {};
+			\node[circle,fill=black,inner sep=0pt,minimum size=6pt,label=above:{$v_3$}] (C) at (3,0) {};
+			\node[circle,fill=black,inner sep=0pt,minimum size=6pt,label=above:{$v_4$}] (D) at (3,-1.5) {};
+			\node[circle,fill=black,inner sep=0pt,minimum size=6pt,label=above:{$v_5$}] (E) at (6,-0.75) {};
+			\draw[rounded corners] (1.25, -1) rectangle (1.75, -0.5) {};
+			\draw[-](4.75,-0.75)--(E);
+			\draw[-](7,-0.75)--(E);
+			\draw[rounded corners] (4.25, -1) rectangle (4.75, -0.5) {};
+			\node at (4.5, -0.3){$h_2$};
+			\node at (1.5, -0.3){$h_1$};
+			\node at (7.25, -0.3){$h_3$};
+			\draw[rounded corners] (7, -1) rectangle (7.5, -0.5) {};
+			\draw(A)..controls(0.5,0)and(1.2,-0.2)..(1.25,-0.6);
+			\draw(B)..controls(0.5,-1.5)and(1.2,-1.3)..(1.25,-0.9);
+			
+			\draw(C)..controls(3.5,0)and(4.2,-0.25)..(4.25,-0.6);
+			\draw(D)..controls(3.5,-1.5)and(4.2,-1.3)..(4.25,-0.9);
+			
+			\draw(D)..controls(2.5,-1.5)and(1.8,-1.3)..(1.75,-0.9);
+			\draw[-](C)..controls(2.5,0)and(1.8,-0.25)..(1.75,-0.6);
+		\end{tikzpicture}
+	\end{center}
+\end{example}
+\begin{example}\label{exa_2} Let $V$ be as in the previous example and $E=\{h_1, h_2, h_3\}$.	Then we define
+	\[
+	s(h_1)=e_V \quad s(h_2)=v_1v_2\quad s(h_3)=v_3v_4\qquad t(h_1)=v_1 \quad t(h_2)=v_3\quad t(h_3)=v_5
+	\]	
+	Now we can depict $\mathcal{G}$ as
+	\begin{center}\begin{tikzpicture}
+			\node[circle,fill=black,inner sep=0pt,minimum size=6pt,label=above:{$v_1$}] (A) at (0,0) {};
+			\node[circle,fill=black,inner sep=0pt,minimum size=6pt,label=above:{$v_2$}] (B) at (0,-1.5) {};
+			\node[circle,fill=black,inner sep=0pt,minimum size=6pt,label=above:{$v_3$}] (C) at (3,-0.75) {};
+			\node[circle,fill=black,inner sep=0pt,minimum size=6pt,label=above:{$v_4$}] (D) at (3,-2.25) {};
+			\node[circle,fill=black,inner sep=0pt,minimum size=6pt,label=right:{$v_5$}] (E) at (6,-1.5) {};
+			\draw[-](1.75,-0.75)--(C);
+			\draw[rounded corners] (1.25, -1) rectangle (1.75, -0.5) {};
+			\draw[-](4.75,-1.5)--(E);
+			\draw[-](-1.5,0)--(A);
+			\draw[rounded corners] (4.25, -1.75) rectangle (4.75, -1.25) {};
+			\node at (4.5, -1.05){$h_3$};
+			\node at (1.5, -0.3){$h_2$};
+			\node at (-1.75, 0.45){$h_1$};
+			\draw[rounded corners] (-2, -0.25) rectangle (-1.5, 0.25) {};
+			\draw(A)..controls(0.5,0)and(1.2,-0.2)..(1.25,-0.6);
+			\draw(B)..controls(0.5,-1.5)and(1.2,-1.3)..(1.25,-0.9);
+			
+			\draw(C)..controls(3.5,-0.75)and(4.2,-0.95)..(4.25,-1.35);
+			\draw(D)..controls(3.5,-2.25)and(4.2,-2.05)..(4.25,-1.65);
+		\end{tikzpicture}
+	\end{center}
+\end{example}
+
+\begin{example}\label{exa_3} Let $\Sigma=(O, \ari)$ be an algebraic signature ($O$ is a set and $\ari:O\rightarrow \mathbb{N}$ a function called \emph{arity function}), we can construct the hypergraph $\mathcal{G}^\Sigma$ taking $V$ and $E$ to be respectively the singleton ${v}$ and the set $O$. We put
+	\begin{align*}
+		s_{\mathcal{G}^\Sigma}:O\to \{v\}^\star \quad o\mapsto v^{\ari(o)}
+		\qquad 
+		t_{\mathcal{G}^\Sigma}:O\to \{v\}^\star \quad o\mapsto v
+	\end{align*}
+	
+	For instance let $\Sigma$ be the signature of groups $(\{m, i, e \}, \ari)$ with
+	\[\ari(m)=2 \quad \ari(i)=1 \quad \ari(e)=0\]	
+	Then $\mathcal{G}^\Sigma$ is depicted as:
+	\begin{center}
+		\begin{tikzpicture}
+			\node[circle,fill=black,inner sep=0pt,minimum size=6pt,label=above:{$v$}] (V) at (0,0) {};
+			\node(E)at(-2, 1.4){$e$};
+			\node(M)at(0, 2.15){$m$};
+			\node(I)at(2, 1.5){$i$};
+			\draw[-](V)..controls(-1.2,0.1)..(-1.75,1);
+			\draw[-](V)..controls(-0.5,0.5)and(-0.8,1)..(-0.25,1.6);
+			\draw[-](V)..controls(-1,0.6)and(-1,1.1)..(-0.25,1.9);
+			\draw[-](V)..controls(0.5,0.5)and(0.8,0.8)..(0.25,1.75);
+			\draw[-](V)..controls(1.2,0.1)..(1.75,1);
+			\draw[-](2.25,1)..controls(2.8,1)and(2.5,0)..(V);
+			\draw[rounded corners] (-2.25, 0.75) rectangle (-1.75, 1.25) {};
+			\draw[rounded corners] (-0.25, 1.5) rectangle (0.25, 2) {};
+			\draw[rounded corners] (2.25, 0.75) rectangle (1.75, 1.25) {};
+		\end{tikzpicture}
+	\end{center}
+\end{example}
+
+
+\subsection{$\hyp$ as a topos of presheaves}
+By \cref{lim} we already know that $\hyp$ has all connected limits, and by \cref{prop:hypadh} we know that it is adhesive. Actually more can be proved about it: we can realize $\hyp$ as a presheaf topos \cite{bonchi2022string}.
+
+\begin{definition}Let $\cat{H}$ be the category in which:
+	\begin{itemize}
+		\item the set of objects is given by $ (\mathbb{N}\times \mathbb{N}) \cup \{\bullet\}$
+		\item arrows are given by the identities $\id{k,l}$ and $\id{\bullet}$ and exactly $k+l$ arrows $f_i:(k,l)\rightarrow \bullet$;
+		\item composition is defined simply putting, for every $f_i:(k,l)\rightarrow \bullet$:
+		\begin{equation*}
+			f_i\circ \id{k,l}=f_i = \id{\bullet}\circ f_i 
+		\end{equation*}
+	\end{itemize}
+	
+\end{definition}
+
+Now, given $F:\cat{H}\to \cat{Set}$ we can define
+\[E_F:=\bigsqcup_{k,l\in \mathbb{N}}F(k,l)\]
+Then we have
+\begin{align*}
+	s_{k,l}&:F(k,l)\to F(\bullet)^{\star} \qquad x \mapsto \prod_{i=1}^{k}F(f_i)(x)\\
+	t_{k,l}&:F(k,l)\to F(\bullet)^{\star} \qquad x \mapsto \prod_{i=k+1}^{k+l}F(f_i)(x)
+\end{align*}
+which induce
+$s_F, t_F:E_F\rightrightarrows \mathcal{F}(\bullet)^{\star}$. Let $\mathcal{G}_F$ be the resulting hypergraph. Now, every $\eta:F\rightarrow H$ in $\cat{Set}^{\cat{H}}$ has components $\eta_{k,l}:F(k,l)\to H(k,l)$, $\eta_{\bullet}:F(\bullet)\to H(\bullet)$, thus it induces a function $\hat{\eta}:E_F\rightarrow E_H$ such that the following squares commute
+\begin{center}
+	\begin{tikzpicture}
+		\node(A) at(2,0){$E_F$};
+		\node(B) at (3.5,0){$F(\bullet)^{\star}$};
+		\node(C) at(3.5,-1.5){$H(\bullet)^{\star}$};
+		\node(D) at (2,-1.5){$E_{H}$};
+		\draw[->](A)--(B)node[pos=0.5, above]{$s_F$};
+		\draw[->](D)--(C)node[pos=0.5, below]{$s_H$};
+		\draw[->](A)--(D)node[pos=0.5, left]{$\hat{\eta}$};
+		\draw[->](B)--(C)node[pos=0.5, right]{$\eta_{\bullet}^{\star}$};
+		\node(A) at(5,0){$E_F$};
+		\node(B) at (6.5,0){$F(\bullet)^{\star}$};
+		\node(C) at(6.5,-1.5){$H(\bullet)^{\star}$};
+		\node(D) at (5,-1.5){$E_F$};
+		\draw[->](A)--(B)node[pos=0.5, above]{$t_F$};
+		\draw[->](D)--(C)node[pos=0.5, below]{$t_H$};
+		\draw[->](A)--(D)node[pos=0.5, left]{$\hat{\eta}$};
+		\draw[->](B)--(C)node[pos=0.5, right]{$\eta_{\bullet}^{\star}$};
+	\end{tikzpicture}
+\end{center}
+This is equivalent to say that $\eta$ induces a morphism $(\hat{\eta}, \eta_{\bullet}):\mathcal{G}_F\to \mathcal{G}_H$. It is now clear that sending $F$ to $\mathcal{G}_F$ and $\eta$ to $(\hat{\eta}, \eta_{\bullet})$ defines a faithful functor $\mathcal{G}_{-}:\cat{Set}^{\cat{H}}\to \hyp$.
+
+\begin{proposition}
+	$\hyp$ is equivalent to the category $\cat{Set}^{\cat{H}}$.
+\end{proposition}
+\begin{proof}
+	Let $X$ be a set, for every $n\in \mathbb{N}$ define
+	\[X_{n}:= {v\in X^{\star} \mid \lgt_X(v)=n}\]
+	
+	Given $F:\cat{H}\to \cat{Set}$ we have that
+	\[i^F_{k,l} (F(k,l))=s^{-1}_F (F(\bullet)_{k})\cap t^{-1}_F (F(\bullet)_{l}) \]
+	where $i^{F}_{k,l}$ is the inclusion $F(k,l)\to E_F$.
+	
+	We are now ready to that $\mathcal{G}_{-}$ is full and essentially surjective.
+	\begin{itemize}
+		\item For fullness, let $(f,g):\mathcal{G}_F\to \mathcal{G}_{H}$ be a morphism of hypergraphs and define $h_{k,l}$ to be $h\circ i^F_{k,l}$, the composition of $h$ with Now, if $x\in F(k,l)$ then 
+		\begin{gather*}s_H (h_{k,l} (x))=s_H (h (i^F_{k,l} (x)))=g^{\star} (s_{F} (i^F_{k,l} (x)))\\t_H (h_{k,l} (x))=s_t (h (i^F_{k,l} (x)))=g^{\star} (t_{F} (i^F_{k,l} (x)))
+		\end{gather*}
+		Now, $\lgt (g^{\star}(v))=\lgt (v)$ for every $v\in F(\bullet)^{\star}$, thus the previous computations shows that there exists $\eta_{k,l}$ such that the square
+		\begin{center}
+			\begin{tikzpicture}
+				\node(A) at(2,0){$F(k,l)$};
+				\node(B) at (4,0){$E_F$};
+				\node(C) at(4,-1.5){$E_H$};
+				\node(D) at (2,-1.5){$H(k,l)$};
+				\draw[->](A)--(B)node[pos=0.5, above]{$i^{F}_{k,l}$};
+				\draw[->](D)--(C)node[pos=0.5, below]{$i^{H}_{k,l}$};
+				\draw[->](A)--(D)node[pos=0.5, left]{$\eta_{k,l}$};
+				\draw[->](B)--(C)node[pos=0.5, right]{$h_{k,l}$};
+			\end{tikzpicture}
+		\end{center}
+		commutes.  Now, defining $\eta_{\bullet}$ as $g$, the collection $ {\eta_{k,l}}_{k,l\in \mathbb{N}}$, defines a natural transformation $\eta:F\to H$. Indeed, if $f_i:(k,l)\to \bullet$ we have:
+		\begin{center}
+			\begin{tikzpicture}
+				\node(A) at(2,0){$F(k,l)$};
+				\node(B) at (4,0){$E_F$};
+				\node(C) at(4,-1.5){$E_H$};
+				\node(D) at (2,-1.5){$H(k,l)$};
+				\node(E) at (5.5, 0){$F(\bullet)^\star$};
+				\node(F) at (5.5, -1.5){$F(\bullet)^\star$};
+				\draw[->](A)--(B)node[pos=0.5, above]{$i^{F}_{k,l}$};
+				\draw[->](D)--(C)node[pos=0.5, below]{$i^{H}_{k,l}$};
+				\draw[->](A)--(D)node[pos=0.5, left]{$\eta_{k,l}$};
+				\draw[->](B)--(C)node[pos=0.5, left]{$h_{k,l}$};
+				\draw[->](B)--(E)node[pos=0.5, above]{$s_F$};
+				\draw[->](C)--(F)node[pos=0.5, below]{$s_H$};
+				\draw[->](E)--(F)node[pos=0.5, right]{$g$};
+				
+				
+				\node(A) at(7,0){$F(k,l)$};
+				\node(B) at (9,0){$E_F$};
+				\node(C) at(9,-1.5){$E_H$};
+				\node(D) at (7,-1.5){$H(k,l)$};
+				\node(E) at (10.5, 0){$F(\bullet)^\star$};
+				\node(F) at (10.5, -1.5){$F(\bullet)^\star$};
+				\draw[->](A)--(B)node[pos=0.5, above]{$i^{F}_{k,l}$};
+				\draw[->](D)--(C)node[pos=0.5, below]{$i^{H}_{k,l}$};
+				\draw[->](A)--(D)node[pos=0.5, left]{$\eta_{k,l}$};
+				\draw[->](B)--(C)node[pos=0.5, left]{$h_{k,l}$};
+				\draw[->](B)--(E)node[pos=0.5, above]{$t_F$};
+				\draw[->](C)--(F)node[pos=0.5, below]{$t_H$};
+				\draw[->](E)--(F)node[pos=0.5, right]{$g$};
+			\end{tikzpicture}
+		\end{center}
+		The diagram on the right implies naturality where $i\leq k$, while the one on the left takes care of the other case. Finally, by contruction it is clear that $(\hat{\eta}, \eta_{\bullet})=(f,g)$. 
+		\item Given an hypergraph $\mathcal{G}=(E, V, s, t)$ we can define 
+		\[F_{\mathcal{G}}(k,l):=s^{-1}(V_k)\cap t^{-1}(V_l) \qquad F_{\mathcal{G}}(\bullet):=V\]
+		Given $f_i:(k,l)\to \bullet$ we put
+		\[F_{\mathcal{G}}(f_i):F_{\mathcal{G}}(k,l)\to F_{\mathcal{G}}(\bullet) \qquad x\mapsto \begin{cases}
+			s(x)_{i} & i\leq k\\
+			t(x)_{i-l} &k <i
+		\end{cases}  \]
+		
+		Now, $F_{\mathcal{G}}$ is a functor $\cat{H}\to \cat{Set}$ and for every $h\in E$ there exists a unique pair $(k,l)$ such that $h\in F_{\mathcal{G}}(k,l) $, thus
+		\[\bigsqcup_{k,l\in \mathbb{N}}F_{\mathcal{G}}(k,l)\simeq E\]
+		Moreover, by construction $s_{F_{\mathcal{G}}}=s$ and $t_{F_{\mathcal{G}}}=t$, from which the thesis follows. \qedhere
+	\end{itemize}
+\end{proof}
+As a corollary we get immediately the following.
+\begin{corollary}
+	$\hyp$ is a complete category.
+\end{corollary}
+
+\subsection{Labelled hypergraphs}
+
+Let $\Sigma=(O, \ari)$ be an algebraic signature, we are going to use the hypergraph $\mathcal{G}^{\Sigma}$ of \ref{exa_3} in order to label hyperedges with operations.
+\begin{definition}Let $\Sigma=(O, \ari)$ be an algebraic signature, the category $\hyps$ of \emph{algebraically labelled hypergraphs} is the slice category $\hyp/G^\Sigma$.
+\end{definition}
+\cref{cor:mono} and \cref{cor:slice} give us immediately an adhesivity result for $\hyp_{\Sigma}$ and a characterization of monomorphisms in it.
+\begin{proposition}\label{prop:mono}
+	For every algebraic signature $\Sigma$, $\hyps$ is an adhesive category. Moreover a morphism $(h,k)$ between two object of $\hyp_{\Sigma}$ is a mono if and only if $h$ and $k$ are injective functions.
+\end{proposition}
+
+$\hyp_{\Sigma}$ has a forgetful functor $U_{\Sigma}:\hyp_{\Sigma}\to \cat{Set}$ which sends $h:\mathcal{H}\to \mathcal{G}^{\Sigma}$ to $U_{\hyp}(\mathcal{H}$). Now, $U_{\hyp}(\mathcal{G}^{\Sigma})=\{v\}$ thus, for every set $X$, there is only one arrow $X\to U_{\hyp}(\mathcal{G}^{\Sigma})$. Define $\Delta_{\Sigma}(X):\Delta_{\hyp}(X)\to \mathcal{G}^{\Sigma}$ to be the transpose of this arrow.
+
+\begin{proposition} $U_\Sigma$
+	has a left adjoint $\Delta_\Sigma$.
+\end{proposition}
+\begin{proof}Let $h:\mathcal{H}\to \mathcal{G}^{\Sigma}$ be an object of $\hyp_{\Sigma}$, and suppose that there exists $f:X\to U_{\Sigma}(\mathcal{H})$. Since $U_{\Sigma}(\mathcal{H})=U_{\hyp}(\mathcal{H})$ and $\id{\cat{Set}}$ is the unit of $\Delta\dashv U_{\hyp}$, there exists a unique morphism of $\hyp$ $(k,f):\Delta_{\hyp}(X)\to \mathcal{H}$. Since the set of hyperedges of $\Delta_{\hyp}(X)$ is empty, $k$ must be the empty function and the commutativity of each of the two triangles below is equivalent to that of the other
+	\begin{center}
+		\begin{tikzpicture}
+			\node(A) at(0,0){$\Delta_{\hyp}(X)$};
+			\node(B) at (3,0){$\mathcal{H}$};
+			\node(C) at(1.5,-1.5){$\mathcal{G}^{\Sigma}$};
+			\draw[->](A)--(B)node[pos=0.5, above]{$(k,f)$};
+			\draw[->](A)--(C)node[pos=0.5, left, xshift=-0.1cm]{$\Delta_\Sigma(X)$};
+			\draw[->](B)--(C)node[pos=0.55, right, xshift=0.1cm]{$(h, !_{V_\mathcal{H}})$};
+			
+			
+			
+			\node(A) at(6,0){$U_{\hyp} (\Delta_{\hyp}(X))$};
+			\node(B) at (9,0){$U_{\hyp} (\mathcal{H})$};
+			\node(C) at(7.5,-1.5){$U_{\hyp} (\mathcal{G}^{\Sigma})$};
+			\draw[->](A)--(B)node[pos=0.5, above]{$f$};
+			\draw[->](A)--(C)node[pos=0.5, left, xshift=-0.1cm]{$U_{\hyp}(\Delta_\Sigma(X))$};
+			\draw[->](B)--(C)node[pos=0.55, right, xshift=0.1cm]{$h$};	
+		\end{tikzpicture}
+	\end{center}
+	But the triangle on the right commutes because $U_{\hyp}(\mathcal{G}^{\Sigma})$ is terminal.
+\end{proof}
+
+
+A more concrete definition of a labeled hypergraphs can be given. Let $\mathcal{H}=(E, V, s, t)$ be an hypergraph, since  $U_{\hyp}(\mathcal{G}^{\Sigma})$ is the singleton an arrow $\mathcal{H}\rightarrow \mathcal{G}^{\Sigma}$, is determined by a function $f:E\to O$  such that $\ari(h(e))$ is equal to the length of $s(e)$. 
+
+\begin{remark}\label{rem:label}
+	If  $\mathcal{H}$ has an hyperedge $h$ such that $t_{\mathcal{H}}(h)$ has a length different from $1$, then there is no morphism $\mathcal{H}\to \mathcal{G}^{\Sigma}$. Indeed, if such a morphism $(f,!_{V_\mathcal{H}}):\mathcal{H}\to \mathcal{G}^\Sigma$ exists, then, for every $h\in E_{\mathcal{H}}$ we have
+	\[f^{\star}(t_{\mathcal{H}}(h))=t_{\mathcal{G}^{\Sigma}}(f(h))=v\] 
+	and we know that $\lgt_{\{v\}}\circ f^{\star}=\lgt_{V_{\mathcal{H}}}$. 
+\end{remark}
+
+We will extend our graphical notation of hypergraph to labeled ones putting the label of an hyperedge $h$ inside its corresponding square.
+\begin{example}\label{lab_1}
+	The simplest example is given by the identity $\id{\mathcal{G}^\Sigma}:\mathcal{G}^\Sigma\rightarrow \mathcal{G}^{\Sigma}$. If $\Sigma$ is the signature of groups we get \begin{center}
+		\begin{tikzpicture}
+			\node[circle,fill=black,inner sep=0pt,minimum size=6pt,label=above:{$v$}] (V) at (0,0) {};
+			\node at(-2,1){$e$};
+			\node at(0,1.75){$m$};	
+			\node at(2,1){$i$};	
+			\node(E)at(-2, 1.4){$e$};
+			\node(M)at(0, 2.15){$m$};
+			\node(I)at(2, 1.45){$i$};
+			\draw[-](V)..controls(-1.2,0.1)..(-1.75,1);
+			\draw[-](V)..controls(-0.5,0.5)and(-0.8,1)..(-0.25,1.6);
+			\draw[-](V)..controls(-1,0.6)and(-1,1.1)..(-0.25,1.9);
+			\draw[-](V)..controls(0.5,0.5)and(0.8,0.8)..(0.25,1.75);
+			\draw[-](V)..controls(1.2,0.1)..(1.75,1);
+			\draw[-](2.25,1)..controls(2.8,1)and(2.5,0)..(V);
+			\draw[rounded corners] (-2.25, 0.75) rectangle (-1.75, 1.25) {};
+			\draw[rounded corners] (-0.25, 1.5) rectangle (0.25, 2) {};
+			\draw[rounded corners] (2.25, 0.75) rectangle (1.75, 1.25) {};
+		\end{tikzpicture}
+	\end{center}
+\end{example}
+
+\begin{example}\label{lab_2}
+	Take again $\Sigma$ the signature of groups, then the hypergraph $\mathcal{G}$ of \cref{exa_2} can be labeled defining
+	\begin{align*}
+		f(h_1)=(e) \quad f(h_2)=f(h_3)=m
+	\end{align*}
+	In this case we get the following:
+	\begin{center}\begin{tikzpicture}
+			\node[circle,fill=black,inner sep=0pt,minimum size=6pt,label=above:{$v_1$}] (A) at (0,0) {};
+			\node[circle,fill=black,inner sep=0pt,minimum size=6pt,label=above:{$v_2$}] (B) at (0,-1.5) {};
+			\node[circle,fill=black,inner sep=0pt,minimum size=6pt,label=above:{$v_3$}] (C) at (3,-0.75) {};
+			\node[circle,fill=black,inner sep=0pt,minimum size=6pt,label=above:{$v_4$}] (D) at (3,-2.25) {};
+			\node[circle,fill=black,inner sep=0pt,minimum size=6pt,label=right:{$v_5$}] (E) at (6,-1.5) {};
+			\node at (-1.75,0) {$e$};
+			\node at (1.5,-0.75) {$m$};
+			\node at (4.5,-1.5) {$m$};
+			\draw[-](1.75,-0.75)--(C);
+			\draw[rounded corners] (1.25, -1) rectangle (1.75, -0.5) {};
+			\draw[-](4.75,-1.5)--(E);
+			\draw[-](-1.5,0)--(A);
+			\draw[rounded corners] (4.25, -1.75) rectangle (4.75, -1.25) {};
+			\node at (4.5, -1.05){$h_2$};
+			\node at (1.5, -0.3){$h_3$};
+			\node at (-1.75, 0.45){$h_1$};
+			\draw[rounded corners] (-2, -0.25) rectangle (-1.5, 0.25) {};
+			\draw(A)..controls(0.5,0)and(1.2,-0.2)..(1.25,-0.6);
+			\draw(B)..controls(0.5,-1.5)and(1.2,-1.3)..(1.25,-0.9);
+			
+			\draw(C)..controls(3.5,-0.75)and(4.2,-0.95)..(4.25,-1.35);
+			\draw(D)..controls(3.5,-2.25)and(4.2,-2.05)..(4.25,-1.65);
+		\end{tikzpicture}
+	\end{center}
+\end{example}
+
+\begin{remark}There is a \emph{colored} (or \emph{typed}) version of these last constructions. Start with a \emph{colored} algebraic signature: this is a triple $(C, O, \ari)$ where $C$ is the set of \emph{colors}, $O$ is the set of \emph{operations} and $\ari:O\rightarrow C^{\bullet}\times C^{\bullet}$ assigns to every operations $f$ an arity and a coarity given by strings of colors.  We can still construct an hypergraph $\mathcal{G}^{\Sigma}$ with $C$ as set of nodes using the operations as hyperedges.  In this context an object in the slice $\hyp/\mathcal{G}^{\Sigma}$ is an hypergraph in which both the hyperedges and the nodes are labeled, the formers with an elemento of $O$ and the latters with an element of $C$ \cite{bonchi2022string}. 
+\end{remark}
+
+
+\subsection{Categories internal to $\hyp$}
 
 \subsubsection{funtore qui dentro}
 
@@ -574,69 +1041,395 @@ riusciamo a mettere risultati di monadicità?
 This appendix is devoted to a quick recall of the definition of internal categories the main account are \cite{borceux1994handbook1,maclane2012sheaves,mac2013categories,jacobs1999categorical}.
 
 
-\begin{definition}
-	Let $\X$ be a category with pullbacks. An \emph{internal category} $\mathcal{C}$ in $\X$ is a $6$-uple $(O_{\mathcal{C}}, A_{\mathcal{C}}, s_{\mathcal{C}}, t_{\mathcal{C}},e_{\mathcal{C}},  c_{\mathcal{C}})$ given by
+\begin{definition}\label{def:internal}
+	Let $\X$ be a category with pullbacks. An \emph{internal category} $\mathcal{C}$ in $\X$ is a $6$-uple $(O_{\mathcal{C}}, A_{\mathcal{C}}, s_{\mathcal{C}}, t_{\mathcal{C}},e_{\mathcal{C}},  \gamma_{\mathcal{C}})$ given by
 	\begin{itemize}
 		\item two objects $O_{\mathcal{C}}$ and $A_{\mathcal{C}}$ called, respectively, the \emph{object of objects} and \emph{object of arrows} ;
 		\item two \emph{source} and \emph{target} arrows $s_{\mathcal{C}}, t_{\mathcal{C}}\colon A_{\mathcal{C}}\rightrightarrows O_{\mathcal{C}}$;
 		\item an \emph{identity arrow} $e_{\mathcal{C}}\colon O_{\mathcal{C}}\to A_{\mathcal{C}}$;
-		\item a \emph{composition arrow} $P\to A_{\mathcal{C}}$, where $P$ is the vertex of a pullbacks square as the one below.
-		\[\xymatrix{P \ar[r]^{p_1} \ar[d]_{p_0} &A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}} \\ A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}}  &O_{\mathcal{C}} }\]
+		\item a \emph{composition arrow} $P_{\mathcal{C}}\to A_{\mathcal{C}}$, where $P_{\mathcal{C}}$ is the vertex of a pullbacks square as the one below.
+		\[\xymatrix{P_{\mathcal{C}} \ar[r]^{p_{1, \mathcal{C}}} \ar[d]_{p_{0, \mathcal{C}}} &A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}} \\ A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}}  &O_{\mathcal{C}} }\]
 	\end{itemize}
 
 These data are required to satisfy the four axioms listed below.
 \begin{enumerate}
-	\item The following diagram commutes:
-	\[\xymatrix{& O_{\mathcal{C}} \ar[d]_{e_{\mathcal{C}}}\ar[dr]^{\id{O_{\mathcal{C}}}} \ar[dl]_{\id{O_{\mathcal{C}}}}\\ O_{\mathcal{C}} & A_{\mathcal{C}}  \ar[l]^{t_{\mathcal{C}}}\ar[r]_{s_{\mathcal{C}}}& O_{\mathcal{C}}}\]
-	\item The following two squares commute:
-	\[\xymatrix{P \ar[r]^{c_{\mathcal{C}}} \ar[d]_{p_0}& A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}} &P \ar[r]^{c_{\mathcal{C}}} \ar[d]_{p_1}& A_{\mathcal{C}} \ar[d]^{t_{\mathcal{C}}} \\ A_{\mathcal{C}} \ar[r]_{s_{\mathcal{C}}}& O_{\mathcal{C}} & A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}}& O_{\mathcal{C}} }\]
+	\item The following diagrams commutes:
+	\[\xymatrix{& O_{\mathcal{C}} \ar[d]_{e_{\mathcal{C}}}\ar[dr]^{\id{O_{\mathcal{C}}}} \ar[dl]_{\id{O_{\mathcal{C}}}} &  &P_{\mathcal{C}} \ar[r]^{\gamma_{\mathcal{C}}} \ar[d]_{p_{0, \mathcal{C}}}& A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}} &P_{\mathcal{C}} \ar[r]^{\gamma_{\mathcal{C}}} \ar[d]_{p_{1, \mathcal{C}}}& A_{\mathcal{C}} \ar[d]^{t_{\mathcal{C}}}\\ O_{\mathcal{C}} & A_{\mathcal{C}}  \ar[l]^{t_{\mathcal{C}}}\ar[r]_{s_{\mathcal{C}}}& O_{\mathcal{C}} &  A_{\mathcal{C}} \ar[r]_{s_{\mathcal{C}}}& O_{\mathcal{C}} & A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}}& O_{\mathcal{C}} }\]
 		\item The following diagram commute:
-	\[\xymatrix{A_{\mathcal{C}} \ar[dr]_{\id{A_{\mathcal{C}}}}\ar[r]^{\phi}& P \ar[d]_{c}&A_{\mathcal{C}} \ar[l]_{\phi'} \ar[dl]^{\id{A_{\mathcal{C}}}} \\ & A_{\mathcal{C}}}\]
-	where $\phi, \phi'\colon A_{\mathcal{C}}\rightrightarrows P$ are the arrows defined by the two diagrams below, whose solid parts commute by the first axiom;
-	\[\xymatrix{A_{\mathcal{C}} \ar@/_.3cm/[ddr]_{\id{A_{\mathcal{C}}}} \ar[r]^{t_{\mathcal{C}}}\ar@{.>}[dr]^{\phi} & O_{\mathcal{C}} \ar[dr]^{e_{\mathcal{C}}}  &&A_{\mathcal{C}} \ar@/^.3cm/[drr]^{\id{A_{\mathcal{C}}}} \ar[d]_{s_{\mathcal{C}}}\ar@{.>}[dr]^{\phi'} \\ & P \ar[r]^{p_1} \ar[d]_{p_0}& A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}} &  O_{\mathcal{C}} \ar[dr]_{e_{\mathcal{C}}} & P \ar[r]^{p_1} \ar[d]_{p_0}& A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}} \\ & A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}}& O_{\mathcal{C}} & &A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}}& O_{\mathcal{C}} }\]
+	\[\xymatrix{A_{\mathcal{C}} \ar[dr]_{\id{A_{\mathcal{C}}}}\ar[r]^{\phi_{\mathcal{C}}}& P_{\mathcal{C}} \ar[d]_{\gamma_{\mathcal{C}}}&A_{\mathcal{C}} \ar[l]_{\phi_{\mathcal{C}}'} \ar[dl]^{\id{A_{\mathcal{C}}}} \\ & A_{\mathcal{C}}}\]
+	where $\phi_{\mathcal{C}}, \phi_{\mathcal{C}}'\colon A_{\mathcal{C}}\rightrightarrows P_{\mathcal{C}}$ are the arrows defined by the two diagrams below, whose solid parts commute by the first axiom;
+	\[\xymatrix{A_{\mathcal{C}} \ar@/_.3cm/[ddr]_{\id{A_{\mathcal{C}}}} \ar[r]^{t_{\mathcal{C}}}\ar@{.>}[dr]^{\phi_{\mathcal{C}}} & O_{\mathcal{C}} \ar[dr]^{e_{\mathcal{C}}}  &&A_{\mathcal{C}} \ar@/^.3cm/[drr]^{\id{A_{\mathcal{C}}}} \ar[d]_{s_{\mathcal{C}}}\ar@{.>}[dr]^{\phi_{\mathcal{C}}'} \\ & P_{\mathcal{C}} \ar[r]^{p_{1, \mathcal{C}}} \ar[d]^{p_{0, \mathcal{C}}}& A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}} &  O_{\mathcal{C}} \ar[dr]_{e_{\mathcal{C}}} & P_{\mathcal{C}} \ar[r]^{p_{1, \mathcal{C}}} \ar[d]^{p_{0, \mathcal{C}}}& A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}} \\ & A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}}& O_{\mathcal{C}} & &A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}}& O_{\mathcal{C}} }\]
 
 \item Let us consider the following two pullback squares:
-	\[\xymatrix{Q \ar[rr]^{q_1} \ar[d]_{q_0} & & A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}}& Q' \ar[rr]^{q'_1} \ar[d]_{q'_0} &&  A_{\mathcal{C}} \ar[d]^{t_{\mathcal{C}}}\\ P   \ar[r]_{c} & A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}} & O_{\mathcal{C}} & P \ar[r]_{c}& A_{\mathcal{C}} \ar[r]_{s_{\mathcal{C}}} & O_{\mathcal{C}}}\]
+	\[\xymatrix{Q_{\mathcal{C}} \ar[rr]^{q_{1, \mathcal{C}}} \ar[d]_{q_{0, \mathcal{C}}} & & A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}}& Q_{\mathcal{C}}' \ar[rr]^{q'_{1, \mathcal{C}}} \ar[d]_{q'_{0, \mathcal{C}}} &&  A_{\mathcal{C}} \ar[d]^{t_{\mathcal{C}}}\\ P_{\mathcal{C}} \ar@/_.4cm/[rr]_{t_{\mathcal{C}}\circ p_{1, \mathcal{C}}}  \ar[r]^{\gamma_{\mathcal{C}}} & A_{\mathcal{C}} \ar[r]^{t_{\mathcal{C}}} & O_{\mathcal{C}} & P_{\mathcal{C}} \ar@/_.4cm/[rr]_{s_{\mathcal{C}}\circ p_{0, \mathcal{C}}}\ar[r]^{\gamma_{\mathcal{C}}}& A_{\mathcal{C}} \ar[r]^{s_{\mathcal{C}}} & O_{\mathcal{C}}}\]
 	
+By the universal property of pullbacks, we can build arrows $\pi_{\mathcal{C}},\theta_{\mathcal{C}}\colon Q_{\mathcal{C}} \rightrightarrows P_{\mathcal{C}}$ and $\pi'_{\mathcal{C}},\theta_{\mathcal{C}}'\colon Q_{\mathcal{C}}'\rightrightarrows P_{\mathcal{C}}$ as the dotted ones in the diagrams below.
+		\[\xymatrix{Q_{\mathcal{C}} \ar@/^.4cm/[drr]^{q_{1, \mathcal{C}}} \ar[d]_{q_{0, \mathcal{C}}} \ar@{.>}[dr]_{\pi_\mathcal{C}} &&&Q_{\mathcal{C}}' \ar[r]^{q'_{0, \mathcal{C}}} \ar@{.>}[dr]^{\pi_{\mathcal{C}}'} \ar@/_.4cm/[ddr]_{q'_{1, \mathcal{C}}}& P_{\mathcal{C}}\ar[dr]^{p_{0,\mathcal{C}}}\\P_{\mathcal{C}} \ar[dr]_{p_{1,\mathcal{C}}}&P_{\mathcal{C}} \ar[r]^{p_{1, \mathcal{C}}} \ar[d]^{p_{0, \mathcal{C}}} &A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}} &  &P_{\mathcal{C}} \ar[r]^{p_{1, \mathcal{C}}} \ar[d]^{p_{0, \mathcal{C}}} &A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}}\\ &A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}}  &O_{\mathcal{C}} & &A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}}  &O_{\mathcal{C}}}\]
+			\[\xymatrix{Q_{\mathcal{C}} \ar@/^.4cm/[drr]^{q_{1, \mathcal{C}}} \ar[d]_{q_{0, \mathcal{C}}} \ar@{.>}[dr]_{\theta_{\mathcal{C}}} &&&Q_{\mathcal{C}}' \ar[r]^{q'_{0, \mathcal{C}}} \ar@{.>}[dr]^{\theta_{\mathcal{C}}'} \ar@/_.4cm/[ddr]_{q'_{1, \mathcal{C}}}& P_{\mathcal{C}}\ar[dr]^{\gamma_{\mathcal{C}}}\\P_{\mathcal{C}} \ar[dr]_{\gamma_{\mathcal{C}}}&P_{\mathcal{C}} \ar[r]^{p_{1, \mathcal{C}}} \ar[d]^{p_{0, \mathcal{C}}} &A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}} &  &P_{\mathcal{C}} \ar[r]^{p_{1, \mathcal{C}}} \ar[d]^{p_{0, \mathcal{C}}} &A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}}\\ &A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}}  &O_{\mathcal{C}} & &A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}}  &O_{\mathcal{C}}}\]
 	
+Now, we have
+\[\begin{split}
+	s_{\mathcal{C}}\circ p_{1, \mathcal{C}}\circ q'_{0, \mathcal{C}} &= t_{\mathcal{C}}\circ p_{0, \mathcal{C}}\circ q'_{0, \mathcal{C}}\\&=t_{\mathcal{C}}\circ p_{1, \mathcal{C} } \circ \pi'_{\mathcal{C}}
+\end{split}\qquad \begin{split}
+t_{\mathcal{C}}\circ p_{0, \mathcal{C}}\circ q_{0, \mathcal{C}} &= s_{\mathcal{C}}\circ p_{1, \mathcal{C}}\circ q_{0, \mathcal{C}}\\&=s_{\mathcal{C}}\circ p_{0, \mathcal{C} } \circ \pi_{\mathcal{C}}
+\end{split}\]
+ Thus there exists $\psi_{\mathcal{C}}\colon Q_{\mathcal{C}} \to Q_{\mathcal{C}}'$ and $\psi'_{\mathcal{C}}\colon Q'_\mathcal{C}\to Q_{\mathcal{C}}$ fitting in the diagrams below.
 	
+		\[\xymatrix{Q'_{\mathcal{C}} \ar@/_.4cm/[ddr]_{\pi'_{\mathcal{C}}} \ar@{.>}[dr]^{\psi'_{\mathcal{C}}}\ar[rr]^{q'_{0, \mathcal{C}}}&&P_{\mathcal{C}} \ar[dr]^{p_{1, \mathcal{C}}}&&Q_\mathcal{C} \ar[rr]^{q_{0, \mathcal{C}}} \ar@/_.4cm/[ddr]_{\pi_{\mathcal{C}}} \ar@{.>}[dr]^{\psi_{\mathcal{C}}}&&P_{\mathcal{C}} \ar[dr]^{p_{0, \mathcal{C}}}\\ & Q_{\mathcal{C}} \ar[rr]^{q_{1, \mathcal{C}}} \ar[d]^{q_{0, \mathcal{C}}} & & A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}}&  & Q_{\mathcal{C}}' \ar[rr]^{q'_{1, \mathcal{C}}} \ar[d]^{q'_{0, \mathcal{C}}} &&  A_{\mathcal{C}} \ar[d]^{t_{\mathcal{C}}}\\ &P_{\mathcal{C}} \ar@/_.4cm/[rr]_{t_{\mathcal{C}}\circ p_{1, \mathcal{C}}}  \ar[r]^{\gamma_{\mathcal{C}}} & A_{\mathcal{C}} \ar[r]^{t_{\mathcal{C}}} & O_{\mathcal{C}} &  & P_{\mathcal{C}} \ar@/_.4cm/[rr]_{s_{\mathcal{C}}\circ p_{0, \mathcal{C}}}\ar[r]^{\gamma_{\mathcal{C}}}& A_{\mathcal{C}} \ar[r]^{s_{\mathcal{C}}} & O_{\mathcal{C}}}\]
+	\iffalse 
+	Moreover, the outer boundaries of the following diagrams are pullbacks and so are the inner right squares. Thus the inner left squares are pullbacks too. 
 	
-	then we ask for the commutativity of the diagram below.
+	\[\xymatrix{Q_{\mathcal{C}}\ar[r]_{\theta_{\mathcal{C}}} \ar[d]_{q_{0, \mathcal{C}}} \ar@/^.4cm/[rr]^{q_{1, \mathcal{C}}}& P_{\mathcal{C}} \ar[r]_{p_{1, \mathcal{C}}} \ar[d]_{p_{0, \mathcal{C}}}  & A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}}& Q_{\mathcal{C}}'\ar[r]_{\theta_{\mathcal{C}}'} \ar[d]_{q'_{0, \mathcal{C}}} \ar@/^.4cm/[rr]^{q'_{1, \mathcal{C}}} & P_{\mathcal{C}} \ar[r]_{p_{0, \mathcal{C}}} \ar[d]_{p_{1, \mathcal{C}}} & A_{\mathcal{C}} \ar[d]^{t_{\mathcal{C}}}\\ P_{\mathcal{C}} \ar@/_.4cm/[rr]_{t_{\mathcal{C}} \circ p_{1, \mathcal{C}}} \ar[r]^{\gamma_{\mathcal{C}}} & A_{\mathcal{C}} \ar[r]^{t_{\mathcal{C}}} & O_{\mathcal{C}} & P_{\mathcal{C}} \ar@/_.4cm/[rr]_{s_{\mathcal{C}} \circ p_{0, \mathcal{C}}} \ar[r]^{\gamma_{\mathcal{C}}} & A_{\mathcal{C}} \ar[r]^{s_{\mathcal{C}}} & O_{\mathcal{C}}}\]
 	
+	In particular, this entails the existence of morphisms $\psi_{\mathcal{C}}\colon Q_{\mathcal{C}} \to Q_{\mathcal{C}}'$ and $\psi'_{\mathcal{C}}\colon Q'_\mathcal{C}\to Q_{\mathcal{C}}$ fitting in the diagrams below.
+	
+		\[\xymatrix{Q_{\mathcal{C}} \ar@/^.4cm/[drr]^{\theta_{\mathcal{C}}} \ar@/_.4cm/[ddr]_{q_{0, \mathcal{C}}} \ar@{.>}[dr]^{\psi_{\mathcal{C}}} &&&Q_{\mathcal{C}}' \ar@/^.4cm/[drr]^{\theta_{\mathcal{C}}'} \ar@{.>}[dr]^{\psi_{\mathcal{C}}'} \ar@/_.4cm/[ddr]_{q'_{0, \mathcal{C}}}\\&Q_{\mathcal{C}}' \ar[r]^{\theta_{\mathcal{C}}'} \ar[d]_{q'_{0, \mathcal{C}}} &P_{\mathcal{C}} \ar[d]^{p_{1, \mathcal{C}}} &  &Q_{\mathcal{C}} \ar[r]^{\theta_{\mathcal{C}}} \ar[d]_{q_{0, \mathcal{C}}} &P_{\mathcal{C}} \ar[d]^{p_{1, \mathcal{C}}}\\ & P_{\mathcal{C}} \ar[r]_{\gamma_{\mathcal{C}}}  &A_{\mathcal{C}} & &P_{\mathcal{C}} \ar[r]_{\gamma_{\mathcal{C}}}  &A_{\mathcal{C}}}\]
+	\fi 
+	
+	So equipped, we can finally ask for the commutativity of the diagram below.
+	\[\xymatrix{Q_{\mathcal{C}}\ar[d]_{\theta_{\mathcal{C}}} \ar[r]^{\psi_{\mathcal{C}}}& Q_{\mathcal{C}}' \ar[r]^{\theta_{\mathcal{C}}'} & P_{\mathcal{C}} \ar[d]^{\gamma_{\mathcal{C}}}\\ P_{\mathcal{C}} \ar[rr]_{\gamma_{\mathcal{C}}}&& A_{\mathcal{C}}}\]
 \end{enumerate}
 \end{definition}
 
+\begin{remark}\label{rem:iso}
+It is worth pointing out that $\psi_{\mathcal{C}}$ and $\psi'_{\mathcal{C}}$ are one the invers of the other. To prove this, we can start noticing that
+\[\begin{split}
+	p_{0, \mathcal{C}}\circ q'_{0, \mathcal{C}}\circ \psi_{\mathcal{C}}\circ \psi'_{\mathcal{C}}&=p_{0, \mathcal{C}}\circ \pi_{\mathcal{C}}\circ \psi'_{\mathcal{C}}\\&= p_{1, \mathcal{C}} \circ q_{0, \mathcal{C}} \circ \psi'_{\mathcal{C}}\\&=p_{1, \mathcal{C}}\circ \pi'_{\mathcal{C}}\\&= p_{0, \mathcal{C}}\circ q'_{0, \mathcal{C}}
+\end{split}\qquad \begin{split}
+	p_{1, \mathcal{C}}\circ q_{0, \mathcal{C}}\circ \psi'_{\mathcal{C}}\circ \psi_{\mathcal{C}}&=p_{1, \mathcal{C}}\circ \pi'_{\mathcal{C}}\circ \psi_{\mathcal{C}}\\&= p_{0, \mathcal{C}} \circ q'_{0, \mathcal{C}} \circ \psi_{\mathcal{C}}\\&=p_{0, \mathcal{C}}\circ \pi_{\mathcal{C}}\\&= p_{1, \mathcal{C}}\circ q_{0, \mathcal{C}}
+\end{split}\]
+\[\begin{split}
+	p_{1, \mathcal{C}}\circ q'_{0, \mathcal{C}}\circ \psi_{\mathcal{C}}\circ \psi'_{\mathcal{C}}&=p_{1, \mathcal{C}}\circ \pi_{\mathcal{C}}\circ \psi'_{\mathcal{C}}\\&= q_{1, \mathcal{C}} \circ \psi'_{\mathcal{C}}\\&=p_{1, \mathcal{C}}\circ q'_{0, \mathcal{C}}
+\end{split}\qquad \begin{split}
+	p_{0, \mathcal{C}}\circ q_{0, \mathcal{C}}\circ \psi'_{\mathcal{C}}\circ \psi_{\mathcal{C}}&=p_{0, \mathcal{C}}\circ \pi_{\mathcal{C}}\circ \psi_{\mathcal{C}}\\&= q'_{1, \mathcal{C}} \circ \psi_{\mathcal{C}}\\&=p_{0, \mathcal{C}}\circ \circ q_{0, \mathcal{C}}
+\end{split}\]
+and thus we have
+\[q'_{0, \mathcal{C}}=q'_{0, \mathcal{C}}\circ \psi_{\mathcal{C}}\circ \psi'_{\mathcal{C}} \qquad q_{0, \mathcal{C}} = q_{0, \mathcal{C}}\circ \psi'_{\mathcal{C}}\circ \psi_{\mathcal{C}}\]
 
-\begin{proposition}
-duale, limiti 
+If we computer further we also get:
+\[\begin{split}
+	q'_{1, \mathcal{C}}\circ \psi_{\mathcal{C}} \circ \psi'_{\mathcal{C}}&= p_{0, \mathcal{C}} \circ q_{0, \mathcal{C}}\circ \psi'_{\mathcal{C}}\\&= p_{0, \mathcal{C}} \circ \pi'_{\mathcal{C}}\\&=q'_{1, \mathcal{C}}
+\end{split} \qquad \begin{split}
+	q_{1, \mathcal{C}}\circ \psi'_{\mathcal{C}} \circ \psi_{\mathcal{C}}&= p_{1, \mathcal{C}} \circ q'_{0, \mathcal{C}}\circ \psi_{\mathcal{C}}\\&= p_{1, \mathcal{C}} \circ \pi_{\mathcal{C}}\\&=q_{1, \mathcal{C}}
+\end{split}\]
+Therefore $\psi_{\mathcal{C}}\circ \psi'_{\mathcal{C}}=$ and $\psi'_{\mathcal{C}}\circ \psi_{\mathcal{C}}=$ as claimed.
+ \end{remark}
+
+\begin{example}\label{ex:disc}
+	Let $\X$ be a category with pullbacks, for every object $X$ putting $\Delta(X):=(X, X, \id{X}, \id{X}, \id{X}, \id{X})$ gives us an internal category in $X$. Indeed, in this case $\phi_{\mathcal{C}}$, $\phi_{\mathcal{C}}'$, $\theta_{\mathcal{C}}$, $\theta_{\mathcal{C}}'$, $\psi_{\mathcal{C}}$ and $\psi_{\mathcal{C}}'$ can be taken to be identities.
+\end{example}
+
+
+\begin{proposition} \label{prop:dual}Let $\X$ be a category with pullbacks, and
+ $\mathcal{C}=(O_{\mathcal{C}}, A_{\mathcal{C}}, s_{\mathcal{C}}, t_{\mathcal{C}}, e_{\mathcal{C}}, \gamma_{\mathcal{C}})$ an internal category in it. Then the \emph{dual category} $\mathcal{C}^*:=(O_{\mathcal{C}}, A_{\mathcal{C}}, t_{\mathcal{C}}, s_{\mathcal{C}}, e_{\mathcal{C}}, \gamma_{\mathcal{C}})$ is an internal category too
 \end{proposition}
 \begin{proof}
-	contenuto...
+The first two axioms of \Cref{def:internal} are symmetrical with respect to the switch of $s_{\mathcal{C}}$ with $t_{\mathcal{C}}$, so we only have to show the third one. Since $\mathcal{C}$ is an internal category and by \Cref{rem:iso} we have
+\begin{align*}
+\gamma_{\mathcal{C}}\circ \theta_{\mathcal{C}} \circ \psi_{\mathcal{C}}' &=\gamma_{\mathcal{C}} \circ \theta_{\mathcal{C}} \circ \psi^{-1}_{\mathcal{C}}\\ & =	\gamma_{\mathcal{C}}\circ \theta'_{\mathcal{C}} 
+\end{align*}
+and we can conclude.
 \end{proof}
 
 \begin{definition}
-	funtori
-\end{definition}
+	Let $\mathcal{C}$ and $\mathcal{D}$ be internal categories in $\X$. A \emph{internal functor} $F\colon \mathcal{C}\to \mathcal{D}$ is a pair $(F_0, F_1)$ of arrows $F_0\colon O_{\mathcal{C}}\to O_{\mathcal{D}}$, $F_1\colon A_{\mathcal{C}}\to A_{\mathcal{D}}$ such that the diagram belows commute.
+	
+	\[\xymatrix{A_{\mathcal{C}} \ar[r]^{F_{1}}  \ar[d]_{s_{\mathcal{C}}}& A_{\mathcal{D}} \ar[d]^{s_{\mathcal{D}}}& A_{\mathcal{C}} \ar[d]_{t_{\mathcal{C}}} \ar[r]^{F_1} & A_{\mathcal{D}} \ar[d]^{t_{\mathcal{D}}} &  O_{\mathcal{C}} \ar[d]_{e_{\mathcal{C}}} \ar[r]^{F_0}& O_{\mathcal{D}} \ar[d]^{e_{\mathcal{D}}}\\ O_{\mathcal{C}} \ar[r]_{F_0} & O_{\mathcal{D}} & O_{\mathcal{C}} \ar[r]_{F_0} & O_{\mathcal{D}} & A_{\mathcal{C}} \ar[r]_{F_1} & A_{\mathcal{D}}}\]
+	
+	Now, by the axioms above we have:
+	\begin{align*}s_{\mathcal{D}}\circ F_1\circ p_{1, \mathcal{C}} &= F_0\circ s_{\mathcal{C}} \circ p_{1, \mathcal{C}}\\&= F_0\circ t_{\mathcal{C}}\circ p_{0,\mathcal{C}}\\&=t_{\mathcal{D}}\circ F_1\circ p_{0,\mathcal{C}}\end{align*}
+	
+ Thus the solid part of the diagram below is commutative and by the universal property of pullbacks there is a unique $\varphi_F$ making it commutative.
+	
+	\[\xymatrix{P_{\mathcal{C}} \ar@{.>}[dr]^{\varphi_F} \ar[d]_{p_{0, \mathcal{C}}} \ar[r]^{p_{1, \mathcal{C}}}& A_{\mathcal{C}} \ar[dr]^{F_1}\\ A_{\mathcal{C}} \ar[dr]_{F_1} & P_{\mathcal{D}} \ar[d]^{p_{0, \mathcal{D}}} \ar[r]^{p_{1, \mathcal{D}}}& A_{\mathcal{D}} \ar[d]^{s_{\mathcal{D}}}\\ & A_{\mathcal{D}} \ar[r]_{t_{\mathcal{D}}} & O_{\mathcal{D}}}\]
+	
+	We ask that such $\varphi$ makes commutative also the diagram below.
+	\[\xymatrix{P_{\mathcal{C}} \ar[d]_{\gamma_{\mathcal{C}}}\ar[r]^{\varphi_F} & P_{\mathcal{D}} \ar[d]^{\gamma_{\mathcal{D}}} \\ A_{\mathcal{C}} \ar[r]_{F_1} & A_{\mathcal{D}}}\]
+	\end{definition}
+
+\begin{lemma}\label{lem:cose}
+Let $\X$ be a category with pullbacks, the following hold true:
+\begin{enumerate}
+	\item  internal categories and functor between them, with the componentwise composition and identities form a category $\cate{X}$;
+	\item the forgetful functor $O:\cate{X}\to \X$, sending an internal category to its object of objects and an internal functor $(F_0, F_1)$ to $F_0$, has a left adjoint $\Delta$. 
+\end{enumerate}
+\end{lemma}
+\begin{proof}\begin{enumerate}
+	\item  The only non obvious thing to check is that the composite of two internal functor is again an internal functor. Let $F:=(F_0, F_1)$ be a functor from $\mathcal{C}\to \mathcal{D}$ and $G:=(G_0, G_1)$ one between $\mathcal{D}$ and $\mathcal{E}$. Thus each square in the diagrams below commute and so the whole diagrams commute too. 
+	
+		\[\xymatrix{A_{\mathcal{C}} \ar[r]^{F_{1}}  \ar[d]_{s_{\mathcal{C}}}& A_{\mathcal{D}} \ar[d]^{s_{\mathcal{D}}} \ar[r]^{G_1}& A_{\mathcal{E}} \ar[d]^{s_{\mathcal{E}}}& A_{\mathcal{C}} \ar[d]_{t_{\mathcal{C}}} \ar[r]^{F_1} & A_{\mathcal{D}}  \ar[d]^{t_{\mathcal{D}}}\ar[r]^{G_1}& A_{\mathcal{E}} \ar[d]^{t_{\mathcal{E}}} &  O_{\mathcal{C}} \ar[d]_{e_{\mathcal{C}}} \ar[r]^{F_0}& O_{\mathcal{D}} \ar[d]^{e_{\mathcal{D}}}  \ar[r]^{G_0}& O_{\mathcal{E}} \ar[d]^{e_{\mathcal{E}}}\\ O_{\mathcal{C}} \ar[r]_{F_0} & O_{\mathcal{D}} \ar[r]_{G_0}& O_{\mathcal{E}} &O_{\mathcal{C}} \ar[r]_{F_0} & O_{\mathcal{D}} \ar[r]_{G_0}& O_{\mathcal{E}} &A_{\mathcal{C}} \ar[r]_{F_1} & A_{\mathcal{D}} \ar[r]_{G_1} & A_{\mathcal{E}}}\]
+		
+		Moreover, we have
+		\[\begin{split}
+			p_{0, \mathcal{E}}\circ \varphi_{G}\circ \varphi_F &= G_0\circ p_{0, \mathcal{D}} \circ \varphi_F \\&=G_0\circ F_0\circ p_{0, \mathcal{C}}\\&= p_{0, \mathcal{E}}\circ \varphi_{G\circ F} 
+		\end{split}\qquad 
+		\begin{split}
+		p_{2, \mathcal{E}}\circ \varphi_{G}\circ \varphi_F &= G_1\circ p_{1, \mathcal{D}} \circ \varphi_F \\&=G_1\circ F_1\circ p_{1, \mathcal{C}}\\&= p_{1, \mathcal{E}}\circ \varphi_{G\circ F} 
+		\end{split}\]
+		
+		Thus $\varphi_{G\circ F}=\varphi_{G}\circ \varphi_F$ and the thesis now follows since both halves of the diagram below commute.
+			\[\xymatrix{P_{\mathcal{C}} \ar[d]_{\gamma_{\mathcal{C}}}\ar[r]^{\varphi_F} & P_{\mathcal{D}} \ar[d]^{\gamma_{\mathcal{D}}}  \ar[r]^{\varphi_G} & P_{\mathcal{E}} \ar[d]^{\gamma_{\mathcal{E}}}\\ A_{\mathcal{C}} \ar[r]_{F_1} & A_{\mathcal{D}}  \ar[r]_{G_1} & A_{\mathcal{D}}}\]
+	\item  Given a set $X$, we can consider the internal category $\Delta(X)$ built in \Cref{ex:disc}. Now, let $f$ be an arrow $X\to O(\mathcal{C})$ for some internal category $\mathcal{C}$.  Now, let us consider the pair $(f, e_{\mathcal{C}}\circ f)$. By definition of internal category we know that:
+	\[\begin{split}
+		s_{\mathcal{C}}\circ e_{\mathcal{C}}\circ f & = \id{O_{\mathcal{C}}}\circ f \\&= f
+	\end{split} \qquad \begin{split}
+	t_{\mathcal{C}}\circ e_{\mathcal{C}}\circ f & = \id{O_{\mathcal{C}}}\circ f \\&= f
+	\end{split}\]
+	
+	Thus we have the three diagrams below.
+		\[\xymatrix@C=30pt{X \ar[r]^{e_{\mathcal{C}}\circ f}  \ar[d]_{\id{X}}& A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}}& X \ar[d]_{\id{X}} \ar[r]^{e_{\mathcal{C}}\circ f} & A_{\mathcal{C}} \ar[d]^{t_{\mathcal{C}}} &  X \ar[d]_{\id{X}} \ar[r]^{f}& O_{\mathcal{C}} \ar[d]^{e_{\mathcal{C}}}\\ X \ar[r]_{f} & O_{\mathcal{C}} & X \ar[r]_{f} & O_{\mathcal{C}} & X \ar[r]_{e_{\mathcal{C}}\circ f} & A_{\mathcal{C}}}\]
+	
+	We can then consider the diagram below, which is commutative since all its internal subdiagrams are.
+		\[\xymatrix{X\ar[r]^{\id{X}}  \ar[d]_{\id{X}} \ar[dr]^{e_{\mathcal{C}}\circ  f}& X \ar[dr]^{f}\\X \ar@/_.5cm/[ddrr]_{e_{\mathcal{C}}\circ f}&A_{\mathcal{C}} \ar@/_.3cm/[ddr]_{\id{A_{\mathcal{C}}}} \ar[r]^{t_{\mathcal{C}}}\ar@{>}[dr]^{\phi_{\mathcal{C}}} & O_{\mathcal{C}} \ar[dr]^{e_{\mathcal{C}}}  \\ && P_{\mathcal{C}} \ar[r]^{p_{1, \mathcal{C}}} \ar[d]^{p_{0, \mathcal{C}}}& A_{\mathcal{C}} \ar[d]^{s_{\mathcal{C}}} \\ && A_{\mathcal{C}} \ar[r]_{t_{\mathcal{C}}}& O_{\mathcal{C}} }\]
+	and this entails that $\varphi_{(f, e_{\mathcal{C}}\circ f)}=\phi_{\mathcal{C}}\circ e_{\mathcal{C}}\circ f$. But then by the seconnd axiom of \Cref{def:internal} we have:
+	\begin{align*}
+		\gamma_{\mathcal{C}}\circ \varphi_{(f, e_{\mathcal{C}}\circ f)} & = \gamma_{\mathcal{C}} \circ \phi_{\mathcal{C}}\circ e_{\mathcal{C}}\circ f\\&= \id{A_{\mathcal{C}}}\circ e_{\mathcal{C}}\circ f\\&= e_{\mathcal{C}}\circ f
+	\end{align*}
+	Thus $(f, e_{\mathcal{C}}\circ f)$ is an internal functor between $\Delta(X)\to \mathcal{C}$ fitting in the diagram below,
+	\[\xymatrix{X \ar[r]^-{\id{X}} \ar[d]_{f}& O(\Delta(X)) \ar[dl]^{O(e_{\mathcal{C}}\circ f, f)}\\ O(\mathcal{C})}\]
+	
+	To conclude it is now enough that $(f, e_{\mathcal{C}}\circ f)$ is the unique internal functor which such property. Let thus $(F_0, F_1)$ be another functor $\Delta(X)\to \mathcal{C}$ such that $O(F_0, F_1)\circ \id{X}=f$, then $F_0=f$.  On the other hand by the definition of internal functor we have
+	\begin{align*}
+	e_{\mathcal{C}}\circ f &=  e_{\mathcal{C}}\circ F_0\\&=	F_1\circ e_{\Delta(X)}\\&= F_1\circ \id{X} \\&= F_1 
+	\end{align*}
+	This concludes the proof. \qedhere 
+	\end{enumerate}	
+	\end{proof} 
+
+\begin{remark}\label{rem:set1}
+	$\cate{\Set}$ coincides with the usual category $\cat{Cat}$ of small categories an functor between them. 
+\end{remark}
 
 \begin{definition}
-	nat transf
+	Let $\X$ be a category with pullbacks and $F, G\colon \mathcal{C}\rightrightarrows \mathcal{D}$ two internal functors between two categories internal in $\X$. A \emph{natural transformation} $\eta$ between $F$ and $G$ is an arrow $O_\mathcal{C}\to A_{\mathcal{D}}$ making the following diagrams commutative.	
+	\[\xymatrix{ & O_{\mathcal{C}} \ar[d]^{\eta} \ar[dr]^{G_0} \ar[dl]_{F_0}  && A_{\mathcal{C}} \ar[r]^{\phi_\eta} \ar[d]_{\phi'_\eta}& P_{\mathcal{D}} \ar[d]^{\gamma_{\mathcal{D}}}\\O_{\mathcal{D}} & A_{\mathcal{D}} \ar[r]_{t_{\mathcal{D}}} \ar[l]^{s_{\mathcal{D}}}& O_{\mathcal{D}} & P_{\mathcal{D}} \ar[r]_{\gamma_{\mathcal{D}}}& A_{\mathcal{D}} } \]
+Here $\phi_\eta, \phi'_\eta \colon A_{\mathcal{C}}\rightrightarrows P_{\mathcal{D}}$ are defined by the diagrams below, whose solid parts commute because of the first diagram above.
+\[\xymatrix{A_{\mathcal{C}} \ar@{.>}[dr]^{\phi_\eta} \ar[d]_{s_{\mathcal{C}}} \ar@/^.3cm/[drr]^{G_1}&&& A_{\mathcal{C}} \ar@{.>}[dr]^{\phi'_\eta} \ar[r]^{t_{\mathcal{C}}} \ar@/_.3cm/[ddr]_{F_1} & O_{\mathcal{C}} \ar[dr]^{\eta} \ar@/^1.5cm/[ddr]^{F_0}\\ O_{\mathcal{C}} \ar[dr]_{\eta}  \ar@/_1.5cm/[drr]_{G_0}& P_{\mathcal{D}} \ar[r]^{p_{1, \mathcal{D}}} \ar[d]^{p_{0, \mathcal{D}}} & A_{\mathcal{D}} \ar[d]^{s_{\mathcal{D}}} &  & P_{\mathcal{D}} \ar[r]^{p_{1, \mathcal{D}}} \ar[d]^{p_{0, \mathcal{D}}} & A_{\mathcal{D}} \ar[d]_{s_{\mathcal{D}}} \\ & A_{\mathcal{D}} \ar[r]^{t_{\mathcal{D}}}& O_{\mathcal{D}}  & & A_{\mathcal{D}} \ar[r]_{t_{\mathcal{D}}}& O_{\mathcal{D}} }\]
 \end{definition}
+
+We can  now organize internal categories, internal functors and internal natural transformation into a $2$-category.
+
+
 	
-\begin{remark}
-	contenuto...
-\end{remark}	
-	
-	\begin{example}
-		contenuto...
-	\end{example}
-	
-\begin{proposition}
-	2 categoria
-\end{proposition}	
+\begin{theorem}
+	Let $\X$ be a category with pullback, then the following are true:
+	\begin{enumerate}
+\item let $\mathcal{C}$ and $\mathcal{D}$ be two internal categories, then there is a category $\dcate{X}(\mathcal{C}, \mathcal{D})$ which has internal functors as objects, internal natural transformations as arrows and in which the composition of $\alpha\colon F\to G$ and $\beta \colon G\to H$ is given by $\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \beta)}$, where $\phi_{(\alpha, \beta)}$  is the unique arrow $O_{\mathcal{C}}\to A_{\mathcal{D}}$ fitting in the diagram below:
+\[\xymatrix@C=35pt@R=15pt{ P_{\mathcal{D}} \ar[rr]^{p_{1, \mathcal{D}}} \ar[dd]_{p_{0, \mathcal{D}}} && A_{\mathcal{D}} \ar[dd]^{s_{\mathcal{D}}} \\ & O_{\mathcal{C}} \ar[dr]^{G_0} \ar@{.>}[ul]_(.4){\phi_{(\alpha, \beta)}} \ar[ur]_{\beta} \ar[dl]^{\alpha}\\ A_{\mathcal{D}} \ar[rr]_{t_{\mathcal{D}}}&& O_{\mathcal{D}}   }\]
+\item there is a $2$-category $\dcate{X}$ whose $0$-cells are internal categories, the hom-categoriy between $\mathcal{C}$ and $\mathcal{D}$ is given by $\dcate{\mathcal{C}, \mathcal{D}}$ and in which the horizontal composition $G\circ F\to G'\circ F'$ of $\alpha \colon F\to F'$ and $\beta\colon G\to G' $ is the arrow  
+
+where $\psi_{(\alpha, \beta)}$ is defined by the diagram below, which commutes by...  
+	\end{enumerate}
+\end{theorem}	
 	
 	\begin{proof}
-		contenuto...
+		\begin{enumerate}
+			\item We have to check three things: that $\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \beta)}$ is really an internal natural transformation, associativity and the presence of identities.
+			\begin{itemize}
+				\item As a first step we can compute to get
+				\[\begin{split}
+					s_{\mathcal{D}}\circ \gamma_{\mathcal{D}} \circ \phi_{(\alpha, \beta)}&=s_{\mathcal{D}}\circ p_{0, \mathcal{D}}\circ \phi_{(\alpha, \beta)}\\&= s_{\mathcal{D}} \circ \alpha\\&= F_0
+				\end{split} \qquad  \begin{split}
+				t_{\mathcal{D}}\circ \gamma_{\mathcal{D}} \circ \phi_{(\alpha, \beta)}&=t_{\mathcal{D}}\circ p_{1, \mathcal{D}}\circ \phi_{(\alpha, \beta)}\\&= t_{\mathcal{D}} \circ \beta\\&= H_0
+				\end{split}\]
+				that is the first request for internal naturality.
+				
+				For the other, let us compute $\phi_{\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \beta)}}$ and $\phi'_{\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \beta)}}$. We can start noticing that the solid parts of the diagrams below commute:
+				\[\begin{split}
+					s_{\mathcal{D}}\circ H_1&=H_0\circ s_{\mathcal{C}}\\&= t_{\mathcal{D}} \circ \beta \circ s_{\mathcal{C}}\\&=t_{\mathcal{D}}\circ p_{1, \mathcal{D}} \circ \phi_{(\alpha, \beta)} \circ s_{\mathcal{C}}\\&=t_{\mathcal{D}}\circ \gamma_{\mathcal{D}}\circ  \phi_{(\alpha, \beta)} \circ s_{\mathcal{C}}
+				\end{split} \qquad \begin{split}
+				t_{\mathcal{D}}\circ F_1&=F_0\circ t_{\mathcal{C}}\\&= s_{\mathcal{D}} \circ \alpha \circ t_{\mathcal{C}}\\&=s_{\mathcal{D}}\circ p_{0, \mathcal{D}} \circ \phi_{(\alpha, \beta)} \circ t_{\mathcal{C}}\\&=s_{\mathcal{D}}\circ \gamma_{\mathcal{D}}\circ  \phi_{(\alpha, \beta)} \circ t_{\mathcal{C}}
+				\end{split}\]
+		and so we get the two dotted arrows $\tau \circ A_{\mathcal{C}}\to Q_{\mathcal{D}}$ and $\rho'\colon A_{\mathcal{C}}\to Q'_{\mathcal{D}}$.
+				 \[\xymatrix@C=26pt@R=15pt{ A_{\mathcal{C}} \ar[dd]_{s_{\mathcal{C}}}\ar@/^.3cm/[drrr]^{H_1} \ar@{.>}[dr]_{\tau} & & & & A_{\mathcal{C}} \ar[dd]_{t_{\mathcal{C}}} \ar@{.>}[dr]_{\rho'}\ar@/^.3cm/[drrr]^{F_1}\\& Q_{\mathcal{D}} \ar[rr]^{q_{1, \mathcal{D}}}  \ar[dd]_{q_{0, \mathcal{D}}} \ar[dr]^{\theta_{\mathcal{D}}}& & A_{\mathcal{D}} \ar[dd]^{s_{\mathcal{D}}} & & Q'_{\mathcal{D}} \ar[rr]^{q'_{1, \mathcal{D}}}  \ar[dd]_{q'_{0, \mathcal{D}}} \ar[dr]^{\theta'_{\mathcal{D}}}& & A_{\mathcal{D}} \ar[dd]^{t_{\mathcal{D}}}\\ O_{\mathcal{C}} \ar[dr]_{\phi_{(\alpha, \beta)}} &&  P_{\mathcal{D}} \ar[ur]_{p_{1, \mathcal{D}}} \ar[d]_{p_{0, \mathcal{D}}}&&  O_{\mathcal{C}} \ar[dr]_{\phi_{(\alpha, \beta)}}  &&  P_{\mathcal{D}} \ar[ur]_{p_{1, \mathcal{D}}} \ar[d]_{p_{0, \mathcal{D}}}\\ & P_{\mathcal{D}} \ar[r]_{\gamma_{\mathcal{D}}}& A_{\mathcal{D}} \ar[r]_{t_{\mathcal{D}}} & O_{\mathcal{D}} &  & P_{\mathcal{D}}\ar[r]_{\gamma_{\mathcal{D}}}& A_{\mathcal{D}} \ar[r]_{s_{\mathcal{D}}} & O_{\mathcal{D}}}\]
+			In addition, the same two diagrams prove that
+			\[\phi_{\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \beta)}}= \theta_{\mathcal{D}}\circ \tau \qquad  \phi'_{\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \beta)}} = \theta'_{\mathcal{D}} \circ \rho'\]
+			
+			Similarly, we can construct $\sigma \colon A_{\mathcal{C}}\to Q_{\mathcal{D}}$ fitting in the diagram below.
+					 \[\xymatrix{  A_{\mathcal{C}} \ar@/_.3cm/[ddr]_{\phi_{\alpha}} \ar[rr]^{t_{\mathcal{C}}} \ar@{.>}[dr]_{\sigma}&& O_{\mathcal{C}} \ar[dr]^{\beta}\\& Q_{\mathcal{D}} \ar[rr]^{q_{1, \mathcal{D}}}  \ar[d]^{q_{0, \mathcal{D}}} & & A_{\mathcal{D}} \ar[d]^{s_{\mathcal{D}}} \\ &   P_{\mathcal{D}} \ar[r]_{\gamma_{\mathcal{D}}}& A_{\mathcal{D}} \ar[r]_{t_{\mathcal{D}}} & O_{\mathcal{D}} }\]
+			
+			To see this, it is enough to show the commutativity of the solid part of the preceding diagram. This is easily done by the following computation. 
+				 \begin{align*}
+			s_{\mathcal{D}}\circ \beta \circ t_{\mathcal{C}}&=G_0\circ t_{\mathcal{C}}
+	\\&=
+			t_{\mathcal{D}}\circ G_1
+			\\&=
+			t_{\mathcal{D}}\circ p_{1, \mathcal{C}} \circ \hat{\sigma}
+			\\&=
+				t_{\mathcal{D}}\circ \gamma_{\mathcal{D}}\circ \hat{\sigma}			\end{align*}
+			
+			We can relate $\sigma$ with $\tau$ and $\rho'$. We can begin noticing that
+			\[\begin{split}
+				p_{0, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \sigma &= p_{1, \mathcal{D}}\circ q_{0, \mathcal{D}}\circ \sigma \\&=p_{1, \mathcal{D}} \circ \hat{\sigma}\\&=G_1	\\&=p_{0, \mathcal{D}}\circ  \phi'_{\beta} 
+			\end{split} \qquad\begin{split}
+			p_{0, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \tau &= p_{1, \mathcal{D}}\circ q_{0, \mathcal{D}}\circ \tau \\&=p_{1, \mathcal{D}} \circ \phi_{(\alpha, \beta)} \circ s_{\mathcal{C}}\\&=\beta	\circ s_{\mathcal{C}} \\&=p_{0, \mathcal{D}} \circ \phi_{\beta} 
+			\end{split} \] 
+			\[\begin{split}	p_{1, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \sigma &=  q_{1, \mathcal{D}}\circ \sigma \\&=\beta \circ t_{\mathcal{C}}\\&=p_{1, \mathcal{D}}\circ  \phi'_{\beta} \end{split} \qquad \begin{split}
+			p_{1, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \tau &=  q_{1, \mathcal{D}}\circ \tau \\&=H_1 \\&=p_{1, \mathcal{D}} \circ \phi_{\beta}
+			\end{split} \]
+			
+			Therefore we can conclude that
+			\[\pi_{\mathcal{D}}\circ \sigma = \phi'_\beta \qquad \pi_{\mathcal{D}}\circ \tau = \phi_\beta \]
+			
+			
+			Similarly, we have:
+			
+			\[\begin{split}
+				p_{0, \mathcal{D}}\circ \pi'_{\mathcal{D}}\circ \rho' &= q'_{1, \mathcal{D}}\circ \rho' \\&=F_1\\&=p_{0, \mathcal{D}}\circ  \phi'_{\alpha} \\ & \end{split} \qquad\begin{split}
+				p_{1, \mathcal{D}}\circ \pi'_{\mathcal{D}}\circ \rho' &=  p_{0, \mathcal{D}}\circ q'_{0, \mathcal{D}} \circ  \rho' \\&=p_{0, \mathcal{D}}\circ \phi_{(\alpha, \beta)} \circ t_{\mathcal{C}}\\&=\alpha \circ t_{\mathcal{C}}\\&=p_{1, \mathcal{D}}\circ \phi'_\alpha\end{split} \] 
+			from which it follows that $\pi'_{\mathcal{D}}\circ \rho' =\phi'_\alpha \qquad$.
+			
+			
+			We can exploit these three equalities in the following computations:
+ 			\[\begin{split}
+ 				p_{0, \mathcal{D}}\circ \theta'_{\mathcal{D}}\circ \psi_{\mathcal{D}} \circ \sigma &=q'_{1, \mathcal{D}}\circ \psi_{\mathcal{D}}\circ \sigma\\&= p_{0, \mathcal{C}}\circ q_{0, \mathcal{C}}\circ \sigma \\&= p_{0, \mathcal{C}}\circ \hat{\sigma}\\&=  \alpha \circ s_{\mathcal{C}}
+ 				\\&= p_{0, \mathcal{C}}\circ \phi_{(\alpha, \beta)}\circ s_{\mathcal{C}}
+ 				\\&= p_{0, \mathcal{C}}\circ q_{0, \mathcal{C}}\circ \tau
+ 				\\&=q'_{1, \mathcal{D}}\circ \psi_{\mathcal{D}}\circ\tau 
+ 				\\&= p_{0, \mathcal{D}}\circ \theta'_{\mathcal{D}}\circ \psi_{\mathcal{D}}\circ \tau
+ 			\end{split} \qquad \begin{split}
+ 			p_{1, \mathcal{D}}\circ \theta'_{\mathcal{D}}\circ \psi_{\mathcal{D}} \circ \sigma &=\gamma_{\mathcal{D}}\circ q'_{0, \mathcal{D}}\circ \psi_{\mathcal{D}}\circ \sigma\\&=\gamma_{\mathcal{D}}\circ \pi_{\mathcal{D}}\circ \sigma\\&= \gamma_{\mathcal{D}}\circ \phi'_{\beta}\\&=  \gamma_{\mathcal{D}}\circ \phi_{\beta}
+ 			\\&= \gamma_{\mathcal{D}}\circ \pi_{\mathcal{D}}\circ \tau
+ 			\\&= \gamma_{\mathcal{D}}\circ q'_{0, \mathcal{D}}\circ \psi_{\mathcal{D}}\circ \tau
+ 			\\&= p_{1, \mathcal{D}}\circ \theta'_{\mathcal{D}}\circ \psi_{\mathcal{D}}\circ \tau\\&
+ 			\end{split}\]
+			
+			
+			\[\begin{split}
+				p_{0, \mathcal{D}}\circ \theta_{\mathcal{D}}\circ \sigma &=\gamma_{\mathcal{D}}\circ q_{0, \mathcal{D}}\circ \sigma\\&=  \gamma_{\mathcal{D}}\circ \phi_\alpha
+				\\&= \gamma_{\mathcal{D}}\circ \phi'_\alpha 
+				\\&= \gamma_{\mathcal{D}}\circ \pi'_{\mathcal{D}}\circ \rho'
+				\\&=\gamma_{\mathcal{D}}\circ q_{0, \mathcal{D}}\circ\psi'_{\mathcal{D}} \circ \rho' 
+				\\&= p_{0, \mathcal{D}}\circ \theta_{\mathcal{D}}\circ \psi'_{\mathcal{D}}\circ \rho'
+			\end{split} \qquad \begin{split}
+				p_{1, \mathcal{D}}\circ \theta_{\mathcal{D}} \circ \sigma &=q_{1, \mathcal{D}}\circ  \sigma\\&=\beta\circ t_{\mathcal{C}}\\&=  p_{1, \mathcal{D}}\circ \phi_{(\alpha, \beta)}\circ t_{\mathcal{C}}
+				\\&= p_{1, \mathcal{D}}\circ q'_{0, \mathcal{D}}\circ \rho'
+				\\&=  q_{1, \mathcal{D}}\circ \psi'_{\mathcal{D}}\circ \rho'
+				\\&= p_{1, \mathcal{D}}\circ \theta_{\mathcal{D}}\circ \psi'_{\mathcal{D}}\circ \rho'
+			\end{split}\]
+			
+			We can then conclude that the two diagrams below commute.
+			\[\xymatrix{A_{\mathcal{C}} \ar[r]^{\sigma}\ar[d]_{\tau} & Q_{\mathcal{D}} \ar[r]^{\psi_{\mathcal{D}}}&Q'_{\mathcal{D}} \ar[d]^{\theta'_{\mathcal{D}}} & A_{\mathcal{C}} \ar[d]_{\rho'}\ar[rr]^{\sigma} && Q_{\mathcal{D}} \ar[d]^{\theta_{\mathcal{D}}}  \\Q_{\mathcal{D}} \ar[r]_{\psi_{\mathcal{D}}}& Q'_{\mathcal{D}} \ar[r]_{\theta'_{\mathcal{D}}} & P_{\mathcal{D}} &Q'_{\mathcal{D}} \ar[r]_{\psi'_{\mathcal{D}}} & Q_{\mathcal{D}} \ar[r]_{\theta_{\mathcal{D}}}& P_{\mathcal{D}}}\]
+			
+			Summing up, and using \Cref{rem:iso}, we have just proved the commutativity of all the subdiagrams of the following one. Thus the whole diagram commute and we can conclude that $\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \beta)}$ is an internal natural transformation as claimed.
+			
+			\[\xymatrix{& P_{\mathcal{D}} \ar@/^.4cm/[ddrrr]^{\gamma_{\mathcal{D}}}\\Q_{\mathcal{D}} \ar[ur]^{\theta_{\mathcal{D}}}\ar[rr]^{\psi_{\mathcal{D}}}&&Q'_{\mathcal{D}} \ar[dr]^{\theta'_{\mathcal{D}}}\\A_{\mathcal{C}} \ar[u]_{\tau} \ar[r]^{\sigma}\ar[d]^{\rho'} \ar@/_1.5cm/[ddr]_{\phi'_{\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \beta)}}}\ar@/^1.5cm/[uur]^{\phi_{\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \beta)}}}& Q_{\mathcal{D}} \ar[dr]_{\theta_{\mathcal{D}}} \ar[r]^{\psi_{\mathcal{D}}}& Q'_{\mathcal{D}} \ar[r]^{\theta'_{\mathcal{D}}} & P_{\mathcal{D}} \ar[r]^{\gamma_{\mathcal{D}}} & A_{\mathcal{D}}\\ Q'_{\mathcal{D}} \ar[dr]_{\theta'_{\mathcal{D}}} \ar[r]_{\psi'_{\mathcal{D}}}& Q_{\mathcal{D}} \ar[r]_{\theta_{\mathcal{D}}} & P_{\mathcal{D}} \ar@/_.3cm/[urr]^{\gamma_{\mathcal{D}}}\\ & P_{\mathcal{D}} \ar@/_.4cm/[uurrr]_{\gamma_{\mathcal{D}}}}\]
+				
+				\item Let us turn to associativity. Consider three natural transformation $\alpha\colon F\to G$, $\beta\colon G\to H$ and $\delta \colon H\to K$. Let $\epsilon_1\colon F\to H$ be $\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \beta)}$ and $\epsilon_2\colon G\to K$ be  $\gamma_{\mathcal{D}}\circ \phi_{(\beta, \delta)}$. To prove associativity we have to show that
+				\[\gamma_{\mathcal{D}}\circ \phi_{(\epsilon_1, \delta)}=\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \epsilon_2)}\]
+				
+				
+				To prove this, we begin by considering the diagram below.
+							 \[\xymatrix{   O_{\mathcal{C}} \ar@/^.4cm/[drrr]^{\delta} \ar@{.>}[dr]^{\zeta}\ar@/_.4cm/[ddr]_{\phi_{(\alpha, \beta)}}\\ & Q_{\mathcal{D}} \ar[rr]^{q_{1, \mathcal{D}}}  \ar[d]^{q_{0, \mathcal{D}}} & & A_{\mathcal{D}} \ar[d]^{s_{\mathcal{D}}} \\ &   P_{\mathcal{D}} \ar[r]_{\gamma_{\mathcal{D}}}& A_{\mathcal{D}} \ar[r]_{t_{\mathcal{D}}} & O_{\mathcal{D}} }\]
+				If we compute we get:
+				\begin{align*}
+					s_{\mathcal{D}}\circ \delta&=H_0
+					\\&=t_{\mathcal{C}}\circ \beta
+					\\&=t_{\mathcal{C}}\circ p_{1, \mathcal{C}}\circ \phi_{(\alpha, \beta)}
+					\\&=t_{\mathcal{D}}\circ \gamma_{\mathcal{D}}\circ \phi_{(\alpha, \beta)}
+				\end{align*}
+				Thus the universal property of pullbacks gives us the dotted arrow $\zeta\colon O_{\mathcal{C}}\to Q_{\mathcal{D}}$. We can use this arrow to comput $\phi_{(\epsilon_1, \delta)}$ and $\phi_{(\alpha, \epsilon_2)}$. On the one hand we have:
+				
+				\[\begin{split}
+					p_{0, \mathcal{D}}\circ \theta_{\mathcal{D}}\circ \zeta &= \gamma_{\mathcal{D}}\circ q_{0, \mathcal{D}}\circ \zeta\\&=\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \beta)}\\&=\epsilon_1\\&=p_{0, \mathcal{D}}\circ \phi_{(\epsilon_1, \delta)}
+				\end{split} \qquad  \begin{split}p_{1, \mathcal{D}}\circ \theta_{\mathcal{D}} \circ \zeta &= q_{1, \mathcal{C}}\circ \zeta \\&=\delta\\&= p_{1, \mathcal{D}}\circ \phi_{(\epsilon_1, \delta)}\\&
+				\end{split}\]
+				and so $\theta_{\mathcal{D}} \circ \zeta =\phi_{(\epsilon_1, \delta)}$. 
+				
+				On the other hand, from the following computations it follows that $\pi_{\mathcal{D}}\circ \zeta=\phi_{(\beta, \delta)}$:
+				\[\begin{split}
+				p_{0, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \zeta&=p_{1, \mathcal{D}}\circ q_{0, \mathcal{D}}\circ \zeta\\&= p_{1, \mathcal{D}}\circ \phi_{(\alpha, \beta)}\\&=\beta\\&=p_{0, \mathcal{D}}\circ \phi_{(\beta, \delta)}
+				\end{split}\qquad \begin{split}
+				p_{1, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \zeta &= q_{1, \mathcal{D}}\circ \zeta\\&=\delta \\&= p_{1, \mathcal{D}}\circ \phi_{(\beta, \delta)}\\&
+				\end{split}\]
+				
+				We can use the previous equality to get:
+					\[\begin{split}
+					p_{0, \mathcal{D}}\circ \theta'_{\mathcal{D}}\circ \psi_{\mathcal{D}} \circ \zeta &= q'_{1, \mathcal{D}}\circ \psi_{\mathcal{D}}\circ \zeta\\&=p_{0, \mathcal{D}}\circ q_{0, \mathcal{D}} \circ \zeta\\&= p_{0, \mathcal{D}}\circ \phi_{(\alpha, \beta)}\\&=\alpha\\&=p_{0, \mathcal{D}}\circ \phi_{(\alpha, \epsilon_2)}
+				\end{split} \qquad 
+				\begin{split}p_{1, \mathcal{D}}\circ \theta'_{\mathcal{D}} \circ \psi_{\mathcal{D}}\circ \zeta &=\gamma_{\mathcal{D}}\circ q'_{0, \mathcal{D}}\circ \psi_{\mathcal{D}}\circ \zeta\\&=\gamma_{\mathcal{D}}\circ \pi_{\mathcal{D}}\circ \zeta\\&=\gamma_{\mathcal{D}}\circ \phi_{(\beta, \delta)}\\&=\epsilon_2\\&=p_{1, \mathcal{D}}\circ \phi_{(\alpha, \epsilon_2)}
+				\end{split}\]
+				Therefore $ \theta'_{\mathcal{D}}\circ \psi_{\mathcal{D}}\circ \zeta = \phi_{(\alpha, \epsilon_2)}$.
+				
+			Summming up, all the internal subdiagram of the following one are commutative and so the whole diagram commutes too. But this is exactly the thesis.
+			\[\xymatrix{O_{\mathcal{C}} \ar[r]_{\zeta} \ar[dr]_{\phi_{(\epsilon_1, \delta)}} \ar@/^.4cm/[rrr]^{\phi_{(\alpha, \epsilon_2)}}& Q_{\mathcal{D}}\ar[d]^{\theta_{\mathcal{D}}} \ar[r]_{\psi_{\mathcal{D}}}& Q_{\mathcal{D}}' \ar[r]_{\theta_{\mathcal{D}}'} & P_{\mathcal{D}} \ar[d]^{\gamma_{\mathcal{D}}}\\ & P_{\mathcal{D}} \ar[rr]_{\gamma_{\mathcal{D}}}&& A_{\mathcal{D}}}\]
+				\item We have to show the presence of identities. Given $F\colon \mathcal{C}\to \mathcal{D}$ we can define $\id{F}$ as $e_{\mathcal{D}}\circ F_0$.  To see that in this way we get a natural transformation we can notice that
+				\[\begin{split}
+					s_{\mathcal{D}}\circ e_{\mathcal{D}}\circ F_0&= \id{O_{\mathcal{D}}}\circ F_0\\&=F_0
+				\end{split}\qquad \begin{split}
+					t_{\mathcal{D}}\circ e_{\mathcal{D}}\circ F_0&= \id{O_{\mathcal{D}}}\circ F_0\\&=F_0
+				\end{split}\]
+				
+				For the last request, notice that
+				\[\begin{split}
+					p_{0, \mathcal{D}} \circ \phi_{\id{F}}&= \id{F}\circ s_{\mathcal{C}}\\&= e_{\mathcal{D}}\circ F_0\circ s_{\mathcal{C}}\\&=F_1\circ e_{\mathcal{C}}\circ s_{\mathcal{C}}
+					\\&= F_1\circ p_{0, \mathcal{C}}\circ \phi'_{\mathcal{C}}
+					\\&=p_{0, \mathcal{D}}\circ \varphi_F\circ \phi'_{\mathcal{C}}
+				\end{split}\qquad \begin{split}
+				p_{1, \mathcal{D}} \circ \phi'_{\id{F}}&= \id{F}\circ t_{\mathcal{C}}\\&= e_{\mathcal{D}}\circ F_0\circ t_{\mathcal{C}}\\&=F_1\circ e_{\mathcal{C}}\circ t_{\mathcal{C}}
+				\\&= F_1\circ p_{1, \mathcal{C}}\circ \phi_{\mathcal{C}}
+				\\&=p_{0, \mathcal{D}}\circ \varphi_F\circ \phi_{\mathcal{C}}
+				\end{split}\]
+					\[\begin{split}
+						p_{1, \mathcal{D}} \circ \phi_{\id{F}}&= F_1\\&=F_1\circ \id{A_{\mathcal{C}}}
+						\\&= F_1\circ p_{1, \mathcal{C}}\circ \phi'_{\mathcal{C}}
+						\\&=p_{1, \mathcal{D}}\circ \varphi_F\circ \phi'_{\mathcal{C}}
+					\end{split}\qquad \begin{split}
+					p_{0, \mathcal{D}} \circ \phi'_{\id{F}}&= F_1\\&= F_1 \circ \id{A_{\mathcal{C}}}
+					\\&= F_1\circ p_{0, \mathcal{C}}\circ \phi_{\mathcal{C}}
+					\\&=p_{0, \mathcal{D}}\circ \varphi_F\circ \phi_{\mathcal{C}}
+				\end{split}\qquad \]
+				
+				so that
+				\[\phi_{\id{F}} = \varphi_F \circ \phi'_{\mathcal{C} }\qquad \phi'_{\id{F}} = \varphi_F \circ \phi_{\mathcal{C}}  \]
+				But then we have
+				\begin{align*}
+					\gamma_{\mathcal{D}}\circ \phi_{\id{F}} & = \gamma_{\mathcal{D}}\circ  \varphi_F \circ \phi'_{\mathcal{C} }\\&=F_1\circ \gamma_{\mathcal{D}}\circ \phi'_{\mathcal{C}}\\&=F_1\circ \id{A_{\mathcal{C}}}\\&=F_1\circ \gamma_{\mathcal{C}}\circ \phi_{\mathcal{C}}\\&= \gamma_{\mathcal{D}}\circ \varphi_{F}\circ \phi_{\mathcal{C}}\\&=\gamma_{\mathcal{D}}\circ \phi'_{\id{F}}
+				\end{align*}
+				
+				Let now $\alpha$ be an internal natural transformation $F\to G$. Then
+				\[\phi_{(\alpha, \id{G})}= \phi_{\mathcal{D}}\circ \alpha \qquad \phi_{(\id{F}, \alpha)}= \phi'_{\mathcal{D}}\circ \alpha\]
+				
+				Too see this, it is enough to compute:
+				\[\begin{split}
+					p_{1, \mathcal{D}}\circ \phi_{(\alpha, \id{G})}&= \id{G}\\&=e_{\mathcal{D}}\circ G_0						\\&=e_{\mathcal{D}}\circ t_{\mathcal{D}}\circ \alpha 
+					\\&=p_{1, \mathcal{D}}\circ \phi_{\mathcal{D}}\circ \alpha
+				\end{split} \qquad \begin{split}
+					p_{0, \mathcal{D}}\circ \phi_{(\id{F}, \alpha)}&=\id{F}\\&=e_{\mathcal{D}}\circ F_0
+					\\&=e_{\mathcal{D}}\circ s_{\mathcal{D}} \circ \alpha 
+					\\&=p_{0, \mathcal{D}}\circ \phi'_{\mathcal{D}}\circ \alpha
+				\end{split}\]
+				\[\begin{split}
+					p_{0, \mathcal{D}}\circ \phi_{(\alpha, \id{G})}&=\alpha 					\\&=\id{A_{\mathcal{D}}}\circ \alpha
+					\\&= p_{0, \mathcal{D}}\circ \phi_{\mathcal{D}}\circ \alpha
+				\end{split} \qquad \begin{split}
+				p_{1, \mathcal{D}}\circ \phi_{(\id{F}, \alpha)}&=\alpha 					\\&=\id{A_{\mathcal{D}}}\circ \alpha
+				\\&= p_{1, \mathcal{D}}\circ \phi'_{\mathcal{D}}\circ \alpha
+				\end{split}\]
+				
+				But then we have:
+				\[\begin{split}
+				\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \id{G})}&=\gamma_{\mathcal{D}}\circ \phi_{\mathcal{D}}\circ \alpha\\&=\id{A_{\mathcal{D}}}\circ \alpha\\&= \alpha 
+				\end{split} \qquad \begin{split}
+				\gamma_{\mathcal{D}}\circ \phi_{(\id{F}, \alpha)}&= \gamma_{\mathcal{D}}\circ \phi'_{\mathcal{D}}\circ \alpha\\&=\id{A_{\mathcal{D}}}\circ \alpha \\&= \alpha 
+				\end{split}
+				\]
+				Thus both $\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \id{G})}$ and $\gamma_{\mathcal{D}}\circ \phi_{(\id{F}, \alpha)}$ are equal to $\alpha$ and we can conclude.
+			\end{itemize}
+			\item  slhflfh
+			\begin{itemize}
+				\item natural
+				\item associativity
+				\item unitality
+				\item interchange\qedhere 
+			\end{itemize}
+		\end{enumerate}
 	\end{proof}
 	
-	\section{The $2$-dimensional Beck monadicity theorem}
+\begin{remark}\label{rem:set}
+	The usual $2$-category $\dcateg$ of small categories, functors and natural transformation  is equal to $\dcate{Set}$
+\end{remark}
+	
+	\section{The 2-dimensional Beck monadicity theorem}
+	
 \end{document} 
