@@ -1,7 +1,9 @@
 \documentclass[a4paper,UKenglish,cleveref,pdftex,thm-restate,numberwithinsect]{lipics-v2021}
+\usepackage{mathtools}
 \newif\ifreport
 %\reporttrue 
 \reportfalse 
+
 
 % full includes some additional material
 \newif\iffull
@@ -140,7 +142,7 @@ textsize=tiny]{todonotes}
 \newcommand{\dcat}[1]{\ensuremath{\mathbf{\underline{#1}}}}
 \newcommand{\dcate}[1]{\underline{\mathbf{Cat}(\cat{#1})}}
 \newcommand{\dcateg}{\mathbf{\underline{Cat}}}
-
+\newcommand{\dhyp}[1]{\underline{\mathbf{Hyp}(\cat{#1})}}
 
 
 \newcommand{\dpo}{\textsc{dpo}}
@@ -600,7 +602,7 @@ textsize=tiny]{todonotes}
 \begin{document}
 	\maketitle
 \begin{abstract}
-	contenuto...
+NOTE SU COSE LIBERE
 \end{abstract}	
 
 \tableofcontents
@@ -610,7 +612,24 @@ textsize=tiny]{todonotes}
 \section{Symmetric monoidal categories}
 \subsection{Gs-monoidal categories}
 
+\subsubsection{Markov categories}
 
+
+\subsubsection{Restriction categories with restriction products}
+
+
+\subsubsection{Cartesian categories}
+
+\begin{theorem}[Fox theorem]
+	
+\end{theorem}
+
+\begin{proof}
+	contenuto...
+\end{proof}
+
+
+SCHEMA FINALE
 
 \section{Hypergraphs}
 
@@ -1016,6 +1035,13 @@ We will extend our graphical notation of hypergraph to labeled ones putting the 
 
 \subsection{Categories internal to $\hyp$}
 
+
+\begin{theorem}There is an isomorphism of $2$-categories between $\dhyp{\categ}$ and $\dcate{\hyp}$.
+\end{theorem}
+\begin{proof}
+Let $F$ be a functor $\cat{H}\to \categ$, 	
+\end{proof}
+
 \subsubsection{funtore qui dentro}
 
 \section{Building (2-)left adjoints}
@@ -1031,6 +1057,10 @@ We will extend our graphical notation of hypergraph to labeled ones putting the 
 
 \subsection{Monadicity results}
 riusciamo a mettere risultati di monadicità?
+
+\subsubsection{1-monadicity}
+
+\subsubsection{2-monadicity}
 \section{Conclusions}
 	
 \bibliography{bibliog.bib}
@@ -1038,7 +1068,7 @@ riusciamo a mettere risultati di monadicità?
 
 \section{Internal categories}
 
-This appendix is devoted to a quick recall of the definition of internal categories the main account are \cite{borceux1994handbook1,maclane2012sheaves,mac2013categories,jacobs1999categorical}.
+This appendix is devoted to recalling the definition of internal categories, further details and a deeper treatment can be found in \cite{borceux1994handbook1,maclane2012sheaves,mac2013categories,jacobs1999categorical}.
 
 
 \begin{definition}\label{def:internal}
@@ -1093,20 +1123,17 @@ t_{\mathcal{C}}\circ p_{0, \mathcal{C}}\circ q_{0, \mathcal{C}} &= s_{\mathcal{C
 
 \begin{remark}\label{rem:iso}
 It is worth pointing out that $\psi_{\mathcal{C}}$ and $\psi'_{\mathcal{C}}$ are one the invers of the other. To prove this, we can start noticing that
-\[\begin{split}
-	p_{0, \mathcal{C}}\circ q'_{0, \mathcal{C}}\circ \psi_{\mathcal{C}}\circ \psi'_{\mathcal{C}}&=p_{0, \mathcal{C}}\circ \pi_{\mathcal{C}}\circ \psi'_{\mathcal{C}}\\&= p_{1, \mathcal{C}} \circ q_{0, \mathcal{C}} \circ \psi'_{\mathcal{C}}\\&=p_{1, \mathcal{C}}\circ \pi'_{\mathcal{C}}\\&= p_{0, \mathcal{C}}\circ q'_{0, \mathcal{C}}
-\end{split}\qquad \begin{split}
-	p_{1, \mathcal{C}}\circ q_{0, \mathcal{C}}\circ \psi'_{\mathcal{C}}\circ \psi_{\mathcal{C}}&=p_{1, \mathcal{C}}\circ \pi'_{\mathcal{C}}\circ \psi_{\mathcal{C}}\\&= p_{0, \mathcal{C}} \circ q'_{0, \mathcal{C}} \circ \psi_{\mathcal{C}}\\&=p_{0, \mathcal{C}}\circ \pi_{\mathcal{C}}\\&= p_{1, \mathcal{C}}\circ q_{0, \mathcal{C}}
-\end{split}\]
-\[\begin{split}
+\[\begin{split} 
+	p_{0, \mathcal{C}}\circ q'_{0, \mathcal{C}}\circ \psi_{\mathcal{C}}\circ \psi'_{\mathcal{C}}&=p_{0, \mathcal{C}}\circ \pi_{\mathcal{C}}\circ \psi'_{\mathcal{C}}\\&= p_{1, \mathcal{C}} \circ q_{0, \mathcal{C}} \circ \psi'_{\mathcal{C}}\\&=p_{1, \mathcal{C}}\circ \pi'_{\mathcal{C}}\\&= p_{0, \mathcal{C}}\circ q'_{0, \mathcal{C}} 
+	\\[.2\baselineskip]
 	p_{1, \mathcal{C}}\circ q'_{0, \mathcal{C}}\circ \psi_{\mathcal{C}}\circ \psi'_{\mathcal{C}}&=p_{1, \mathcal{C}}\circ \pi_{\mathcal{C}}\circ \psi'_{\mathcal{C}}\\&= q_{1, \mathcal{C}} \circ \psi'_{\mathcal{C}}\\&=p_{1, \mathcal{C}}\circ q'_{0, \mathcal{C}}
 \end{split}\qquad \begin{split}
-	p_{0, \mathcal{C}}\circ q_{0, \mathcal{C}}\circ \psi'_{\mathcal{C}}\circ \psi_{\mathcal{C}}&=p_{0, \mathcal{C}}\circ \pi_{\mathcal{C}}\circ \psi_{\mathcal{C}}\\&= q'_{1, \mathcal{C}} \circ \psi_{\mathcal{C}}\\&=p_{0, \mathcal{C}}\circ \circ q_{0, \mathcal{C}}
+p_{1, \mathcal{C}}\circ q_{0, \mathcal{C}}\circ \psi'_{\mathcal{C}}\circ \psi_{\mathcal{C}}&=p_{1, \mathcal{C}}\circ \pi'_{\mathcal{C}}\circ \psi_{\mathcal{C}}\\&= p_{0, \mathcal{C}} \circ q'_{0, \mathcal{C}} \circ \psi_{\mathcal{C}}\\&=p_{0, \mathcal{C}}\circ \pi_{\mathcal{C}}\\&= p_{1, \mathcal{C}}\circ q_{0, \mathcal{C}}\\[.2\baselineskip] 	p_{0, \mathcal{C}}\circ q_{0, \mathcal{C}}\circ \psi'_{\mathcal{C}}\circ \psi_{\mathcal{C}}&=p_{0, \mathcal{C}}\circ \pi_{\mathcal{C}}\circ \psi_{\mathcal{C}}\\&= q'_{1, \mathcal{C}} \circ \psi_{\mathcal{C}}\\&=p_{0, \mathcal{C}}\circ \circ q_{0, \mathcal{C}}
 \end{split}\]
 and thus we have
 \[q'_{0, \mathcal{C}}=q'_{0, \mathcal{C}}\circ \psi_{\mathcal{C}}\circ \psi'_{\mathcal{C}} \qquad q_{0, \mathcal{C}} = q_{0, \mathcal{C}}\circ \psi'_{\mathcal{C}}\circ \psi_{\mathcal{C}}\]
 
-If we computer further we also get:
+If we compute further we also get:
 \[\begin{split}
 	q'_{1, \mathcal{C}}\circ \psi_{\mathcal{C}} \circ \psi'_{\mathcal{C}}&= p_{0, \mathcal{C}} \circ q_{0, \mathcal{C}}\circ \psi'_{\mathcal{C}}\\&= p_{0, \mathcal{C}} \circ \pi'_{\mathcal{C}}\\&=q'_{1, \mathcal{C}}
 \end{split} \qquad \begin{split}
@@ -1200,7 +1227,7 @@ Let $\X$ be a category with pullbacks, the following hold true:
 	$\cate{\Set}$ coincides with the usual category $\cat{Cat}$ of small categories an functor between them. 
 \end{remark}
 
-\begin{definition}
+\begin{definition}\label{def:nat}
 	Let $\X$ be a category with pullbacks and $F, G\colon \mathcal{C}\rightrightarrows \mathcal{D}$ two internal functors between two categories internal in $\X$. A \emph{natural transformation} $\eta$ between $F$ and $G$ is an arrow $O_\mathcal{C}\to A_{\mathcal{D}}$ making the following diagrams commutative.	
 	\[\xymatrix{ & O_{\mathcal{C}} \ar[d]^{\eta} \ar[dr]^{G_0} \ar[dl]_{F_0}  && A_{\mathcal{C}} \ar[r]^{\phi_\eta} \ar[d]_{\phi'_\eta}& P_{\mathcal{D}} \ar[d]^{\gamma_{\mathcal{D}}}\\O_{\mathcal{D}} & A_{\mathcal{D}} \ar[r]_{t_{\mathcal{D}}} \ar[l]^{s_{\mathcal{D}}}& O_{\mathcal{D}} & P_{\mathcal{D}} \ar[r]_{\gamma_{\mathcal{D}}}& A_{\mathcal{D}} } \]
 Here $\phi_\eta, \phi'_\eta \colon A_{\mathcal{C}}\rightrightarrows P_{\mathcal{D}}$ are defined by the diagrams below, whose solid parts commute because of the first diagram above.
@@ -1211,17 +1238,16 @@ We can  now organize internal categories, internal functors and internal natural
 
 
 	
-\begin{theorem}
+\begin{theorem}\label{thm:due}
 	Let $\X$ be a category with pullback, then the following are true:
 	\begin{enumerate}
 \item let $\mathcal{C}$ and $\mathcal{D}$ be two internal categories, then there is a category $\dcate{X}(\mathcal{C}, \mathcal{D})$ which has internal functors as objects, internal natural transformations as arrows and in which the composition of $\alpha\colon F\to G$ and $\beta \colon G\to H$ is given by $\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \beta)}$, where $\phi_{(\alpha, \beta)}$  is the unique arrow $O_{\mathcal{C}}\to A_{\mathcal{D}}$ fitting in the diagram below:
 \[\xymatrix@C=35pt@R=15pt{ P_{\mathcal{D}} \ar[rr]^{p_{1, \mathcal{D}}} \ar[dd]_{p_{0, \mathcal{D}}} && A_{\mathcal{D}} \ar[dd]^{s_{\mathcal{D}}} \\ & O_{\mathcal{C}} \ar[dr]^{G_0} \ar@{.>}[ul]_(.4){\phi_{(\alpha, \beta)}} \ar[ur]_{\beta} \ar[dl]^{\alpha}\\ A_{\mathcal{D}} \ar[rr]_{t_{\mathcal{D}}}&& O_{\mathcal{D}}   }\]
-\item there is a $2$-category $\dcate{X}$ whose $0$-cells are internal categories, the hom-categoriy between $\mathcal{C}$ and $\mathcal{D}$ is given by $\dcate{\mathcal{C}, \mathcal{D}}$ and in which the horizontal composition $G\circ F\to G'\circ F'$ of $\alpha \colon F\to F'$ and $\beta\colon G\to G' $ is the arrow  
-
-where $\psi_{(\alpha, \beta)}$ is defined by the diagram below, which commutes by...  
-	\end{enumerate}
+\item there is a $2$-category $\dcate{X}$ whose $0$-cells are internal categories, the hom-categoriy between $\mathcal{C}$ and $\mathcal{D}$ is given by $\cate{\mathcal{C}, \mathcal{D}}$ and in which the horizontal composition $G\circ F\to G'\circ F'$ of $\alpha \colon F\to F'$ and $\beta\colon G\to G' $ is the arrow $\gamma_{\mathcal{E}}\circ \phi_{\beta}\circ \alpha$.
+\end{enumerate}
 \end{theorem}	
 	
+		
 	\begin{proof}
 		\begin{enumerate}
 			\item We have to check three things: that $\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \beta)}$ is really an internal natural transformation, associativity and the presence of identities.
@@ -1241,7 +1267,7 @@ where $\psi_{(\alpha, \beta)}$ is defined by the diagram below, which commutes b
 				t_{\mathcal{D}}\circ F_1&=F_0\circ t_{\mathcal{C}}\\&= s_{\mathcal{D}} \circ \alpha \circ t_{\mathcal{C}}\\&=s_{\mathcal{D}}\circ p_{0, \mathcal{D}} \circ \phi_{(\alpha, \beta)} \circ t_{\mathcal{C}}\\&=s_{\mathcal{D}}\circ \gamma_{\mathcal{D}}\circ  \phi_{(\alpha, \beta)} \circ t_{\mathcal{C}}
 				\end{split}\]
 		and so we get the two dotted arrows $\tau \circ A_{\mathcal{C}}\to Q_{\mathcal{D}}$ and $\rho'\colon A_{\mathcal{C}}\to Q'_{\mathcal{D}}$.
-				 \[\xymatrix@C=26pt@R=15pt{ A_{\mathcal{C}} \ar[dd]_{s_{\mathcal{C}}}\ar@/^.3cm/[drrr]^{H_1} \ar@{.>}[dr]_{\tau} & & & & A_{\mathcal{C}} \ar[dd]_{t_{\mathcal{C}}} \ar@{.>}[dr]_{\rho'}\ar@/^.3cm/[drrr]^{F_1}\\& Q_{\mathcal{D}} \ar[rr]^{q_{1, \mathcal{D}}}  \ar[dd]_{q_{0, \mathcal{D}}} \ar[dr]^{\theta_{\mathcal{D}}}& & A_{\mathcal{D}} \ar[dd]^{s_{\mathcal{D}}} & & Q'_{\mathcal{D}} \ar[rr]^{q'_{1, \mathcal{D}}}  \ar[dd]_{q'_{0, \mathcal{D}}} \ar[dr]^{\theta'_{\mathcal{D}}}& & A_{\mathcal{D}} \ar[dd]^{t_{\mathcal{D}}}\\ O_{\mathcal{C}} \ar[dr]_{\phi_{(\alpha, \beta)}} &&  P_{\mathcal{D}} \ar[ur]_{p_{1, \mathcal{D}}} \ar[d]_{p_{0, \mathcal{D}}}&&  O_{\mathcal{C}} \ar[dr]_{\phi_{(\alpha, \beta)}}  &&  P_{\mathcal{D}} \ar[ur]_{p_{1, \mathcal{D}}} \ar[d]_{p_{0, \mathcal{D}}}\\ & P_{\mathcal{D}} \ar[r]_{\gamma_{\mathcal{D}}}& A_{\mathcal{D}} \ar[r]_{t_{\mathcal{D}}} & O_{\mathcal{D}} &  & P_{\mathcal{D}}\ar[r]_{\gamma_{\mathcal{D}}}& A_{\mathcal{D}} \ar[r]_{s_{\mathcal{D}}} & O_{\mathcal{D}}}\]
+				 \[\xymatrix@C=26pt@R=15pt{ A_{\mathcal{C}} \ar[dd]_{s_{\mathcal{C}}}\ar@/^.3cm/[drrr]^{H_1} \ar@{.>}[dr]_{\tau} & & & & A_{\mathcal{C}} \ar[dd]_{t_{\mathcal{C}}} \ar@{.>}[dr]_{\rho'}\ar@/^.3cm/[drrr]^{F_1}\\& Q_{\mathcal{D}} \ar[rr]^{q_{1, \mathcal{D}}}  \ar[dd]_{q_{0, \mathcal{D}}} \ar[dr]^{\theta_{\mathcal{D}}}& & A_{\mathcal{D}} \ar[dd]^{s_{\mathcal{D}}} & & Q'_{\mathcal{D}} \ar[rr]^{q'_{1, \mathcal{D}}}  \ar[dd]_{q'_{0, \mathcal{D}}} \ar[dr]^{\theta'_{\mathcal{D}}}& & A_{\mathcal{D}} \ar[dd]^{t_{\mathcal{D}}}\\ O_{\mathcal{C}} \ar[dr]_{\phi_{(\alpha, \beta)}} &&  P_{\mathcal{D}} \ar[ur]_{p_{1, \mathcal{D}}} \ar[d]_{p_{0, \mathcal{D}}}&&  O_{\mathcal{C}} \ar[dr]_{\phi_{(\alpha, \beta)}}  &&  P_{\mathcal{D}} \ar[ur]_{p_{0, \mathcal{D}}} \ar[d]_{p_{1, \mathcal{D}}}\\ & P_{\mathcal{D}} \ar[r]_{\gamma_{\mathcal{D}}}& A_{\mathcal{D}} \ar[r]_{t_{\mathcal{D}}} & O_{\mathcal{D}} &  & P_{\mathcal{D}}\ar[r]_{\gamma_{\mathcal{D}}}& A_{\mathcal{D}} \ar[r]_{s_{\mathcal{D}}} & O_{\mathcal{D}}}\]
 			In addition, the same two diagrams prove that
 			\[\phi_{\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \beta)}}= \theta_{\mathcal{D}}\circ \tau \qquad  \phi'_{\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \beta)}} = \theta'_{\mathcal{D}} \circ \rho'\]
 			
@@ -1260,14 +1286,11 @@ where $\psi_{(\alpha, \beta)}$ is defined by the diagram below, which commutes b
 			
 			We can relate $\sigma$ with $\tau$ and $\rho'$. We can begin noticing that
 			\[\begin{split}
-				p_{0, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \sigma &= p_{1, \mathcal{D}}\circ q_{0, \mathcal{D}}\circ \sigma \\&=p_{1, \mathcal{D}} \circ \hat{\sigma}\\&=G_1	\\&=p_{0, \mathcal{D}}\circ  \phi'_{\beta} 
+				p_{0, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \sigma &= p_{1, \mathcal{D}}\circ q_{0, \mathcal{D}}\circ \sigma \\&=p_{1, \mathcal{D}} \circ \hat{\sigma}\\&=G_1	\\&=p_{0, \mathcal{D}}\circ  \phi'_{\beta} \\[.2\baselineskip] p_{1, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \sigma &=  q_{1, \mathcal{D}}\circ \sigma \\&=\beta \circ t_{\mathcal{C}}\\&=p_{1, \mathcal{D}}\circ  \phi'_{\beta} 
 			\end{split} \qquad\begin{split}
-			p_{0, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \tau &= p_{1, \mathcal{D}}\circ q_{0, \mathcal{D}}\circ \tau \\&=p_{1, \mathcal{D}} \circ \phi_{(\alpha, \beta)} \circ s_{\mathcal{C}}\\&=\beta	\circ s_{\mathcal{C}} \\&=p_{0, \mathcal{D}} \circ \phi_{\beta} 
+			p_{0, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \tau &= p_{1, \mathcal{D}}\circ q_{0, \mathcal{D}}\circ \tau \\&=p_{1, \mathcal{D}} \circ \phi_{(\alpha, \beta)} \circ s_{\mathcal{C}}\\&=\beta	\circ s_{\mathcal{C}} \\&=p_{0, \mathcal{D}} \circ \phi_{\beta}  \\[.2\baselineskip] 	p_{1, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \tau &=  q_{1, \mathcal{D}}\circ \tau \\&=H_1 \\&=p_{1, \mathcal{D}} \circ \phi_{\beta}
 			\end{split} \] 
-			\[\begin{split}	p_{1, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \sigma &=  q_{1, \mathcal{D}}\circ \sigma \\&=\beta \circ t_{\mathcal{C}}\\&=p_{1, \mathcal{D}}\circ  \phi'_{\beta} \end{split} \qquad \begin{split}
-			p_{1, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \tau &=  q_{1, \mathcal{D}}\circ \tau \\&=H_1 \\&=p_{1, \mathcal{D}} \circ \phi_{\beta}
-			\end{split} \]
-			
+	
 			Therefore we can conclude that
 			\[\pi_{\mathcal{D}}\circ \sigma = \phi'_\beta \qquad \pi_{\mathcal{D}}\circ \tau = \phi_\beta \]
 			
@@ -1279,35 +1302,27 @@ where $\psi_{(\alpha, \beta)}$ is defined by the diagram below, which commutes b
 				p_{1, \mathcal{D}}\circ \pi'_{\mathcal{D}}\circ \rho' &=  p_{0, \mathcal{D}}\circ q'_{0, \mathcal{D}} \circ  \rho' \\&=p_{0, \mathcal{D}}\circ \phi_{(\alpha, \beta)} \circ t_{\mathcal{C}}\\&=\alpha \circ t_{\mathcal{C}}\\&=p_{1, \mathcal{D}}\circ \phi'_\alpha\end{split} \] 
 			from which it follows that $\pi'_{\mathcal{D}}\circ \rho' =\phi'_\alpha \qquad$.
 			
-			
 			We can exploit these three equalities in the following computations:
- 			\[\begin{split}
+ 			\[\begin{split} p_{0, \mathcal{D}}\circ \theta_{\mathcal{D}}\circ \sigma &=\gamma_{\mathcal{D}}\circ q_{0, \mathcal{D}}\circ \sigma\\&=  \gamma_{\mathcal{D}}\circ \phi_\alpha
+ 				\\&= \gamma_{\mathcal{D}}\circ \phi'_\alpha 
+ 				\\&= \gamma_{\mathcal{D}}\circ \pi'_{\mathcal{D}}\circ \rho'
+ 				\\&=\gamma_{\mathcal{D}}\circ q_{0, \mathcal{D}}\circ\psi'_{\mathcal{D}} \circ \rho' 
+ 				\\&= p_{0, \mathcal{D}}\circ \theta_{\mathcal{D}}\circ \psi'_{\mathcal{D}}\circ \rho'\\[.2\baselineskip]
  				p_{0, \mathcal{D}}\circ \theta'_{\mathcal{D}}\circ \psi_{\mathcal{D}} \circ \sigma &=q'_{1, \mathcal{D}}\circ \psi_{\mathcal{D}}\circ \sigma\\&= p_{0, \mathcal{C}}\circ q_{0, \mathcal{C}}\circ \sigma \\&= p_{0, \mathcal{C}}\circ \hat{\sigma}\\&=  \alpha \circ s_{\mathcal{C}}
  				\\&= p_{0, \mathcal{C}}\circ \phi_{(\alpha, \beta)}\circ s_{\mathcal{C}}
  				\\&= p_{0, \mathcal{C}}\circ q_{0, \mathcal{C}}\circ \tau
  				\\&=q'_{1, \mathcal{D}}\circ \psi_{\mathcal{D}}\circ\tau 
- 				\\&= p_{0, \mathcal{D}}\circ \theta'_{\mathcal{D}}\circ \psi_{\mathcal{D}}\circ \tau
+ 				\\&= p_{0, \mathcal{D}}\circ \theta'_{\mathcal{D}}\circ \psi_{\mathcal{D}}\circ \tau 
  			\end{split} \qquad \begin{split}
- 			p_{1, \mathcal{D}}\circ \theta'_{\mathcal{D}}\circ \psi_{\mathcal{D}} \circ \sigma &=\gamma_{\mathcal{D}}\circ q'_{0, \mathcal{D}}\circ \psi_{\mathcal{D}}\circ \sigma\\&=\gamma_{\mathcal{D}}\circ \pi_{\mathcal{D}}\circ \sigma\\&= \gamma_{\mathcal{D}}\circ \phi'_{\beta}\\&=  \gamma_{\mathcal{D}}\circ \phi_{\beta}
+ 		p_{1, \mathcal{D}}\circ \theta_{\mathcal{D}} \circ \sigma &=q_{1, \mathcal{D}}\circ  \sigma\\&=\beta\circ t_{\mathcal{C}}\\&=  p_{1, \mathcal{D}}\circ \phi_{(\alpha, \beta)}\circ t_{\mathcal{C}}
+ 			\\&= p_{1, \mathcal{D}}\circ q'_{0, \mathcal{D}}\circ \rho'
+ 			\\&=  q_{1, \mathcal{D}}\circ \psi'_{\mathcal{D}}\circ \rho'
+ 			\\&= p_{1, \mathcal{D}}\circ \theta_{\mathcal{D}}\circ \psi'_{\mathcal{D}}\circ \rho' \\[.2\baselineskip]  	p_{1, \mathcal{D}}\circ \theta'_{\mathcal{D}}\circ \psi_{\mathcal{D}} \circ \sigma &=\gamma_{\mathcal{D}}\circ q'_{0, \mathcal{D}}\circ \psi_{\mathcal{D}}\circ \sigma\\&=\gamma_{\mathcal{D}}\circ \pi_{\mathcal{D}}\circ \sigma\\&= \gamma_{\mathcal{D}}\circ \phi'_{\beta}\\&=  \gamma_{\mathcal{D}}\circ \phi_{\beta}
  			\\&= \gamma_{\mathcal{D}}\circ \pi_{\mathcal{D}}\circ \tau
  			\\&= \gamma_{\mathcal{D}}\circ q'_{0, \mathcal{D}}\circ \psi_{\mathcal{D}}\circ \tau
- 			\\&= p_{1, \mathcal{D}}\circ \theta'_{\mathcal{D}}\circ \psi_{\mathcal{D}}\circ \tau\\&
+ 			\\&= p_{1, \mathcal{D}}\circ \theta'_{\mathcal{D}}\circ \psi_{\mathcal{D}}\circ \tau\\ &
  			\end{split}\]
-			
-			
-			\[\begin{split}
-				p_{0, \mathcal{D}}\circ \theta_{\mathcal{D}}\circ \sigma &=\gamma_{\mathcal{D}}\circ q_{0, \mathcal{D}}\circ \sigma\\&=  \gamma_{\mathcal{D}}\circ \phi_\alpha
-				\\&= \gamma_{\mathcal{D}}\circ \phi'_\alpha 
-				\\&= \gamma_{\mathcal{D}}\circ \pi'_{\mathcal{D}}\circ \rho'
-				\\&=\gamma_{\mathcal{D}}\circ q_{0, \mathcal{D}}\circ\psi'_{\mathcal{D}} \circ \rho' 
-				\\&= p_{0, \mathcal{D}}\circ \theta_{\mathcal{D}}\circ \psi'_{\mathcal{D}}\circ \rho'
-			\end{split} \qquad \begin{split}
-				p_{1, \mathcal{D}}\circ \theta_{\mathcal{D}} \circ \sigma &=q_{1, \mathcal{D}}\circ  \sigma\\&=\beta\circ t_{\mathcal{C}}\\&=  p_{1, \mathcal{D}}\circ \phi_{(\alpha, \beta)}\circ t_{\mathcal{C}}
-				\\&= p_{1, \mathcal{D}}\circ q'_{0, \mathcal{D}}\circ \rho'
-				\\&=  q_{1, \mathcal{D}}\circ \psi'_{\mathcal{D}}\circ \rho'
-				\\&= p_{1, \mathcal{D}}\circ \theta_{\mathcal{D}}\circ \psi'_{\mathcal{D}}\circ \rho'
-			\end{split}\]
-			
+		
 			We can then conclude that the two diagrams below commute.
 			\[\xymatrix{A_{\mathcal{C}} \ar[r]^{\sigma}\ar[d]_{\tau} & Q_{\mathcal{D}} \ar[r]^{\psi_{\mathcal{D}}}&Q'_{\mathcal{D}} \ar[d]^{\theta'_{\mathcal{D}}} & A_{\mathcal{C}} \ar[d]_{\rho'}\ar[rr]^{\sigma} && Q_{\mathcal{D}} \ar[d]^{\theta_{\mathcal{D}}}  \\Q_{\mathcal{D}} \ar[r]_{\psi_{\mathcal{D}}}& Q'_{\mathcal{D}} \ar[r]_{\theta'_{\mathcal{D}}} & P_{\mathcal{D}} &Q'_{\mathcal{D}} \ar[r]_{\psi'_{\mathcal{D}}} & Q_{\mathcal{D}} \ar[r]_{\theta_{\mathcal{D}}}& P_{\mathcal{D}}}\]
 			
@@ -1364,22 +1379,16 @@ where $\psi_{(\alpha, \beta)}$ is defined by the diagram below, which commutes b
 				\[\begin{split}
 					p_{0, \mathcal{D}} \circ \phi_{\id{F}}&= \id{F}\circ s_{\mathcal{C}}\\&= e_{\mathcal{D}}\circ F_0\circ s_{\mathcal{C}}\\&=F_1\circ e_{\mathcal{C}}\circ s_{\mathcal{C}}
 					\\&= F_1\circ p_{0, \mathcal{C}}\circ \phi'_{\mathcal{C}}
-					\\&=p_{0, \mathcal{D}}\circ \varphi_F\circ \phi'_{\mathcal{C}}
+					\\&=p_{0, \mathcal{D}}\circ \varphi_F\circ \phi'_{\mathcal{C}} \\[.2\baselineskip] 			p_{1, \mathcal{D}} \circ \phi_{\id{F}}&= F_1\\&=F_1\circ \id{A_{\mathcal{C}}}
+					\\&= F_1\circ p_{1, \mathcal{C}}\circ \phi'_{\mathcal{C}}
+					\\&=p_{1, \mathcal{D}}\circ \varphi_F\circ \phi'_{\mathcal{C}}
 				\end{split}\qquad \begin{split}
 				p_{1, \mathcal{D}} \circ \phi'_{\id{F}}&= \id{F}\circ t_{\mathcal{C}}\\&= e_{\mathcal{D}}\circ F_0\circ t_{\mathcal{C}}\\&=F_1\circ e_{\mathcal{C}}\circ t_{\mathcal{C}}
 				\\&= F_1\circ p_{1, \mathcal{C}}\circ \phi_{\mathcal{C}}
+				\\&=p_{0, \mathcal{D}}\circ \varphi_F\circ \phi_{\mathcal{C}}\\[.2\baselineskip] p_{0, \mathcal{D}} \circ \phi'_{\id{F}}&= F_1\\&= F_1 \circ \id{A_{\mathcal{C}}}
+				\\&= F_1\circ p_{0, \mathcal{C}}\circ \phi_{\mathcal{C}}
 				\\&=p_{0, \mathcal{D}}\circ \varphi_F\circ \phi_{\mathcal{C}}
 				\end{split}\]
-					\[\begin{split}
-						p_{1, \mathcal{D}} \circ \phi_{\id{F}}&= F_1\\&=F_1\circ \id{A_{\mathcal{C}}}
-						\\&= F_1\circ p_{1, \mathcal{C}}\circ \phi'_{\mathcal{C}}
-						\\&=p_{1, \mathcal{D}}\circ \varphi_F\circ \phi'_{\mathcal{C}}
-					\end{split}\qquad \begin{split}
-					p_{0, \mathcal{D}} \circ \phi'_{\id{F}}&= F_1\\&= F_1 \circ \id{A_{\mathcal{C}}}
-					\\&= F_1\circ p_{0, \mathcal{C}}\circ \phi_{\mathcal{C}}
-					\\&=p_{0, \mathcal{D}}\circ \varphi_F\circ \phi_{\mathcal{C}}
-				\end{split}\qquad \]
-				
 				so that
 				\[\phi_{\id{F}} = \varphi_F \circ \phi'_{\mathcal{C} }\qquad \phi'_{\id{F}} = \varphi_F \circ \phi_{\mathcal{C}}  \]
 				But then we have
@@ -1394,19 +1403,15 @@ where $\psi_{(\alpha, \beta)}$ is defined by the diagram below, which commutes b
 				\[\begin{split}
 					p_{1, \mathcal{D}}\circ \phi_{(\alpha, \id{G})}&= \id{G}\\&=e_{\mathcal{D}}\circ G_0						\\&=e_{\mathcal{D}}\circ t_{\mathcal{D}}\circ \alpha 
 					\\&=p_{1, \mathcal{D}}\circ \phi_{\mathcal{D}}\circ \alpha
+					\\[.2\baselineskip] p_{0, \mathcal{D}}\circ \phi_{(\alpha, \id{G})}&=\alpha 					\\&=\id{A_{\mathcal{D}}}\circ \alpha
+					\\&= p_{0, \mathcal{D}}\circ \phi_{\mathcal{D}}\circ \alpha
 				\end{split} \qquad \begin{split}
 					p_{0, \mathcal{D}}\circ \phi_{(\id{F}, \alpha)}&=\id{F}\\&=e_{\mathcal{D}}\circ F_0
 					\\&=e_{\mathcal{D}}\circ s_{\mathcal{D}} \circ \alpha 
-					\\&=p_{0, \mathcal{D}}\circ \phi'_{\mathcal{D}}\circ \alpha
+					\\&=p_{0, \mathcal{D}}\circ \phi'_{\mathcal{D}}\circ \alpha \\[.2\baselineskip]				p_{1, \mathcal{D}}\circ \phi_{(\id{F}, \alpha)}&=\alpha 					\\&=\id{A_{\mathcal{D}}}\circ \alpha
+					\\&= p_{1, \mathcal{D}}\circ \phi'_{\mathcal{D}}\circ \alpha
 				\end{split}\]
-				\[\begin{split}
-					p_{0, \mathcal{D}}\circ \phi_{(\alpha, \id{G})}&=\alpha 					\\&=\id{A_{\mathcal{D}}}\circ \alpha
-					\\&= p_{0, \mathcal{D}}\circ \phi_{\mathcal{D}}\circ \alpha
-				\end{split} \qquad \begin{split}
-				p_{1, \mathcal{D}}\circ \phi_{(\id{F}, \alpha)}&=\alpha 					\\&=\id{A_{\mathcal{D}}}\circ \alpha
-				\\&= p_{1, \mathcal{D}}\circ \phi'_{\mathcal{D}}\circ \alpha
-				\end{split}\]
-				
+		
 				But then we have:
 				\[\begin{split}
 				\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \id{G})}&=\gamma_{\mathcal{D}}\circ \phi_{\mathcal{D}}\circ \alpha\\&=\id{A_{\mathcal{D}}}\circ \alpha\\&= \alpha 
@@ -1416,9 +1421,105 @@ where $\psi_{(\alpha, \beta)}$ is defined by the diagram below, which commutes b
 				\]
 				Thus both $\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \id{G})}$ and $\gamma_{\mathcal{D}}\circ \phi_{(\id{F}, \alpha)}$ are equal to $\alpha$ and we can conclude.
 			\end{itemize}
-			\item  slhflfh
+			\item  Let $\epsilon$ be $\gamma_{\mathcal{E}}\circ \phi_{\beta}\circ \alpha$, we begin by showing that $\epsilon$ is really a natural transformation.
+			
+		For the first half of \Cref{def:nat} it is enough to compute:
+			\[\begin{split}
+				s_{\mathcal{E}}\circ \epsilon &= s_{\mathcal{E}}\circ \gamma_{\mathcal{E}}\circ \phi_{\beta}\circ \alpha\\&=  s_{\mathcal{E}}\circ p_{0, \mathcal{E}}\circ \phi_{\beta}\circ \alpha \\&= s_{\mathcal{E}} \circ \beta \circ s_{\mathcal{D}} \circ \alpha \\&=G_0\circ F_0 
+			\end{split}\qquad \begin{split}
+				t_{\mathcal{E}}\circ \epsilon &= t_{\mathcal{E}}\circ \gamma_{\mathcal{E}}\circ \phi_{\beta}\circ \alpha\\&=  t_{\mathcal{E}}\circ p_{0, \mathcal{E}}\circ \phi_{\beta}\circ \alpha \\&= t_{\mathcal{E}} \circ \beta \circ t_{\mathcal{D}} \circ \alpha \\&=G'_0\circ F'_0 
+			\end{split}\]
+			
+			For the second half, we proceed more or less as in the proof of point $1$, beginning by computing $\phi_{\epsilon}$ and $\phi'_{\epsilon}$. 
+			
+			
+			\iffalse  We start by noticing that:
+			\begin{align*}
+				t_{\mathcal{E}}\circ \beta \circ F_0&=  G'_0\circ F_0 \\&=G'_0\circ s_{\mathcal{D}}\circ \alpha \\&=s_{\mathcal{E}}\circ G'_1\circ \alpha 
+			\end{align*}
+			so that the diagram below commutes and the dotted arrow $\chi_{(\alpha, \beta)}\colon O_{\mathcal{C}}\to P_{\mathcal{E}}$ exists.
+		
+			
+		We can start by buildin an arrow 
+			\[\xymatrix@C=40pt{O_{\mathcal{C}} \ar[r]^{\alpha} \ar[d]_{F_{0}} \ar@{.>}[dr]_{\chi_{(\alpha, \beta)}}&A_{\mathcal{D}}\ar[dr]^{G'_1}\\O_{\mathcal{D}} \ar[dr]_{\beta} & P_{\mathcal{E}} \ar[r]^{p_{1, \mathcal{E}}} \ar[d]_{p_{0, \mathcal{E}}} & A_{\mathcal{E}}\ \ar[d]^{s_{\mathcal{E}}} \\ &A_{\mathcal{E}}\ar[r]_{t_{\mathcal{E}}} & O_{\mathcal{E}}}\]
+				\fi 
+				
+				
+			We can build $\chi\colon A_{\mathcal{C}}\to Q_{\mathcal{E}}$ and $\chi'\colon A_{\mathcal{C}}\to Q'_{\mathcal{E}}$ fitting in the diagrams below.
+\[\xymatrix@C=26pt@R=15pt{  A_{\mathcal{C}} \ar[d]_{s_{\mathcal{C}}} \ar@{.>}[dr]^{\chi}\ar[rr]^{F'_1} & &A_{\mathcal{D}} \ar[dr]^{G'_1} &&A_{\mathcal{C}} \ar[d]_{t_{\mathcal{C}}} \ar@{.>}[dr]^{\chi'}\ar[rr]^{F_1} & &A_{\mathcal{D}} \ar[dr]^{G_1}\\O_{\mathcal{C}} \ar[ddrr]^(.3){\epsilon}|\hole \ar[d]_{\alpha} & Q_{\mathcal{E}} \ar[rr]^{q_{1, \mathcal{E}}}  \ar[dd]^(.3){q_{0, \mathcal{E}}} \ar[dr]^{\theta_{\mathcal{E}}}& & A_{\mathcal{E}} \ar[dd]^{s_{\mathcal{E}}} & O_{\mathcal{C}} \ar[ddrr]^(.3){\epsilon}|\hole \ar[d]_{\alpha} & Q'_{\mathcal{E}} \ar[rr]^{q'_{1, \mathcal{E}}}  \ar[dd]^(.3){q'_{0, \mathcal{E}}} \ar[dr]^{\theta'_{\mathcal{E}}}& & A_{\mathcal{E}} \ar[dd]^{t_{\mathcal{E}}}\\ A_{\mathcal{D}} \ar[dr]_{\phi_{\beta}}  &&  P_{\mathcal{E}} \ar[ur]_{p_{1, \mathcal{E}}} \ar[d]^{p_{0, \mathcal{E}}} && A_{\mathcal{D}} \ar[dr]_{\phi_{\beta}}  &&  P_{\mathcal{E}} \ar[ur]_{p_{0, \mathcal{E}}} \ar[d]^{p_{1, \mathcal{E}}}\\  &P_{\mathcal{E}}\ar[r]_{\gamma_{\mathcal{E}}}& A_{\mathcal{E}} \ar[r]_{t_{\mathcal{E}}} & O_{\mathcal{E}} & & P_{\mathcal{E}}\ar[r]_{\gamma_{\mathcal{E}}}& A_{\mathcal{E}} \ar[r]_{s_{\mathcal{E}}} & O_{\mathcal{E}}}\]			
+	Indeed, to see this it is enough to check the commutativity of the solid part:
+			\[\begin{split}
+				s_{\mathcal{E}}\circ G'_1\circ F'_1 &= G'_0\circ s_{\mathcal{D}}\circ F'_1\\&= G'_0\circ F'_0\circ s_{\mathcal{C}}\\&=G'_0\circ t_{\mathcal{D}}\circ \alpha \circ s_{\mathcal{C}}\\&= t_{\mathcal{E}}\circ G'_1\circ \alpha \circ s_{\mathcal{C}}\\&= t_{\mathcal{E}} \circ p_{1, \mathcal{D}}\circ \phi_\beta\circ \alpha \circ s_{\mathcal{C}}\\&= t_{\mathcal{E}}\circ \gamma_{\mathcal{E}}\circ \phi_\beta\circ \alpha \circ s_{\mathcal{C}}
+			\end{split} \qquad \begin{split}
+			t_{\mathcal{E}}\circ G_1\circ F_1 &= G_0\circ t_{\mathcal{D}}\circ F_1\\&= G_0\circ F_0\circ t_{\mathcal{C}}\\&=G_0\circ s_{\mathcal{D}}\circ \alpha \circ t_{\mathcal{C}}\\&= s_{\mathcal{E}}\circ G_1\circ \alpha \circ t_{\mathcal{C}}\\&= s_{\mathcal{E}} \circ p_{0, \mathcal{D}}\circ \phi'_\beta\circ \alpha \circ t_{\mathcal{C}}\\&= s_{\mathcal{E}}\circ \gamma_{\mathcal{E}}\circ \phi'_\beta\circ \alpha \circ t_{\mathcal{C}}
+			\end{split}\]
+	In particular, we get that $\phi_{\epsilon}= \theta_{\mathcal{E}}\circ \chi$ and 
+			$\phi'_{\epsilon}= \theta'_{\mathcal{E}}\circ \chi'$.
+			
+			
+To relate $\chi$ and $\chi'$, we construct other two arrows $\omega, \omega' \colon A_{\mathcal{C}}\to P_{\mathcal{E}}$ by proving the commutativity of the diagrams below: 
+\[\xymatrix{ A_{\mathcal{C}} \ar@{.>}[dr]^{\omega}\ar[d]_{\phi'_\alpha} \ar[r]^{t_{\mathcal{C}}}& O_{\mathcal{C}} \ar[r]^{F'_0}& O_{\mathcal{D}} \ar[d]^{\beta}\\ P_{\mathcal{D}} \ar[d]_{\gamma_\mathcal{D}} & P_{\mathcal{E}}  \ar[r]^{p_{1, \mathcal{E}}} \ar[d]_{p_{0, \mathcal{E}}}& A_{\mathcal{E}} \ar[d]^{s_{\mathcal{E}}}\\ A_{\mathcal{D}} \ar[r]_{G_1} & A_{\mathcal{E}} \ar[r]_{t_{\mathcal{E}}} & O_{\mathcal{E}}}\]
+
+To see this, it is enough to show the commutativity of the solid part of the preceding diagram. This is easily done by the following computation. 
+\begin{align*}
+	s_{\mathcal{E}}\circ \beta \circ F'_0 \circ t_{\mathcal{C}}&= G_0\circ F'_0\circ t_{\mathcal{C}}\\ & = G_0\circ t_{\mathcal{D}}\circ F'_1\\&= t_{\mathcal{E}}\circ G_1\circ F'_1
+	\\&=t_{\mathcal{E}}\circ G_1\circ p_{1, \mathcal{D}} \circ \phi'_{\alpha}	 \\&= t_{\mathcal{E}}\circ p_{1, \mathcal{E}} \circ \varphi_{G} \circ \phi'_\alpha\\ &= t_{\mathcal{E}}\circ \gamma_{\mathcal{D}} \circ \varphi_{G}\circ \phi'_{\alpha}\\&=t_{\mathcal{E}}\circ G_1\circ \gamma_{\mathcal{D}}\circ \phi'_{\alpha}	\end{align*}
+
+Now,
+
+
+We can relate $\sigma$ with $\tau$ and $\rho'$. We can begin noticing that
+\[\begin{split}
+	p_{0, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \sigma &= p_{1, \mathcal{D}}\circ q_{0, \mathcal{D}}\circ \sigma \\&=p_{1, \mathcal{D}} \circ \hat{\sigma}\\&=G_1	\\&=p_{0, \mathcal{D}}\circ  \phi'_{\beta} \\[.2\baselineskip] p_{1, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \sigma &=  q_{1, \mathcal{D}}\circ \sigma \\&=\beta \circ t_{\mathcal{C}}\\&=p_{1, \mathcal{D}}\circ  \phi'_{\beta} 
+\end{split} \qquad\begin{split}
+	p_{0, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \tau &= p_{1, \mathcal{D}}\circ q_{0, \mathcal{D}}\circ \tau \\&=p_{1, \mathcal{D}} \circ \phi_{(\alpha, \beta)} \circ s_{\mathcal{C}}\\&=\beta	\circ s_{\mathcal{C}} \\&=p_{0, \mathcal{D}} \circ \phi_{\beta}  \\[.2\baselineskip] 	p_{1, \mathcal{D}}\circ \pi_{\mathcal{D}}\circ \tau &=  q_{1, \mathcal{D}}\circ \tau \\&=H_1 \\&=p_{1, \mathcal{D}} \circ \phi_{\beta}
+\end{split} \] 
+
+Therefore we can conclude that
+\[\pi_{\mathcal{D}}\circ \sigma = \phi'_\beta \qquad \pi_{\mathcal{D}}\circ \tau = \phi_\beta \]
+
+
+Similarly, we have:
+
+\[\begin{split}
+	p_{0, \mathcal{D}}\circ \pi'_{\mathcal{D}}\circ \rho' &= q'_{1, \mathcal{D}}\circ \rho' \\&=F_1\\&=p_{0, \mathcal{D}}\circ  \phi'_{\alpha} \\ & \end{split} \qquad\begin{split}
+	p_{1, \mathcal{D}}\circ \pi'_{\mathcal{D}}\circ \rho' &=  p_{0, \mathcal{D}}\circ q'_{0, \mathcal{D}} \circ  \rho' \\&=p_{0, \mathcal{D}}\circ \phi_{(\alpha, \beta)} \circ t_{\mathcal{C}}\\&=\alpha \circ t_{\mathcal{C}}\\&=p_{1, \mathcal{D}}\circ \phi'_\alpha\end{split} \] 
+from which it follows that $\pi'_{\mathcal{D}}\circ \rho' =\phi'_\alpha \qquad$.
+
+We can exploit these three equalities in the following computations:
+\[\begin{split} p_{0, \mathcal{D}}\circ \theta_{\mathcal{D}}\circ \sigma &=\gamma_{\mathcal{D}}\circ q_{0, \mathcal{D}}\circ \sigma\\&=  \gamma_{\mathcal{D}}\circ \phi_\alpha
+	\\&= \gamma_{\mathcal{D}}\circ \phi'_\alpha 
+	\\&= \gamma_{\mathcal{D}}\circ \pi'_{\mathcal{D}}\circ \rho'
+	\\&=\gamma_{\mathcal{D}}\circ q_{0, \mathcal{D}}\circ\psi'_{\mathcal{D}} \circ \rho' 
+	\\&= p_{0, \mathcal{D}}\circ \theta_{\mathcal{D}}\circ \psi'_{\mathcal{D}}\circ \rho'\\[.2\baselineskip]
+	p_{0, \mathcal{D}}\circ \theta'_{\mathcal{D}}\circ \psi_{\mathcal{D}} \circ \sigma &=q'_{1, \mathcal{D}}\circ \psi_{\mathcal{D}}\circ \sigma\\&= p_{0, \mathcal{C}}\circ q_{0, \mathcal{C}}\circ \sigma \\&= p_{0, \mathcal{C}}\circ \hat{\sigma}\\&=  \alpha \circ s_{\mathcal{C}}
+	\\&= p_{0, \mathcal{C}}\circ \phi_{(\alpha, \beta)}\circ s_{\mathcal{C}}
+	\\&= p_{0, \mathcal{C}}\circ q_{0, \mathcal{C}}\circ \tau
+	\\&=q'_{1, \mathcal{D}}\circ \psi_{\mathcal{D}}\circ\tau 
+	\\&= p_{0, \mathcal{D}}\circ \theta'_{\mathcal{D}}\circ \psi_{\mathcal{D}}\circ \tau 
+\end{split} \qquad \begin{split}
+	p_{1, \mathcal{D}}\circ \theta_{\mathcal{D}} \circ \sigma &=q_{1, \mathcal{D}}\circ  \sigma\\&=\beta\circ t_{\mathcal{C}}\\&=  p_{1, \mathcal{D}}\circ \phi_{(\alpha, \beta)}\circ t_{\mathcal{C}}
+	\\&= p_{1, \mathcal{D}}\circ q'_{0, \mathcal{D}}\circ \rho'
+	\\&=  q_{1, \mathcal{D}}\circ \psi'_{\mathcal{D}}\circ \rho'
+	\\&= p_{1, \mathcal{D}}\circ \theta_{\mathcal{D}}\circ \psi'_{\mathcal{D}}\circ \rho' \\[.2\baselineskip]  	p_{1, \mathcal{D}}\circ \theta'_{\mathcal{D}}\circ \psi_{\mathcal{D}} \circ \sigma &=\gamma_{\mathcal{D}}\circ q'_{0, \mathcal{D}}\circ \psi_{\mathcal{D}}\circ \sigma\\&=\gamma_{\mathcal{D}}\circ \pi_{\mathcal{D}}\circ \sigma\\&= \gamma_{\mathcal{D}}\circ \phi'_{\beta}\\&=  \gamma_{\mathcal{D}}\circ \phi_{\beta}
+	\\&= \gamma_{\mathcal{D}}\circ \pi_{\mathcal{D}}\circ \tau
+	\\&= \gamma_{\mathcal{D}}\circ q'_{0, \mathcal{D}}\circ \psi_{\mathcal{D}}\circ \tau
+	\\&= p_{1, \mathcal{D}}\circ \theta'_{\mathcal{D}}\circ \psi_{\mathcal{D}}\circ \tau\\ &
+\end{split}\]
+
+We can then conclude that the two diagrams below commute.
+\[\xymatrix{A_{\mathcal{C}} \ar[r]^{\sigma}\ar[d]_{\tau} & Q_{\mathcal{D}} \ar[r]^{\psi_{\mathcal{D}}}&Q'_{\mathcal{D}} \ar[d]^{\theta'_{\mathcal{D}}} & A_{\mathcal{C}} \ar[d]_{\rho'}\ar[rr]^{\sigma} && Q_{\mathcal{D}} \ar[d]^{\theta_{\mathcal{D}}}  \\Q_{\mathcal{D}} \ar[r]_{\psi_{\mathcal{D}}}& Q'_{\mathcal{D}} \ar[r]_{\theta'_{\mathcal{D}}} & P_{\mathcal{D}} &Q'_{\mathcal{D}} \ar[r]_{\psi'_{\mathcal{D}}} & Q_{\mathcal{D}} \ar[r]_{\theta_{\mathcal{D}}}& P_{\mathcal{D}}}\]
+
+Summing up, and using \Cref{rem:iso}, we have just proved the commutativity of all the subdiagrams of the following one. Thus the whole diagram commute and we can conclude that $\gamma_{\mathcal{D}}\circ \phi_{(\alpha, \beta)}$ is an internal natural transformation as claimed.
+
+\[\xymatrix{& P_{\mathcal{E}} \ar@/^.4cm/[ddrrr]^{\gamma_{\mathcal{E}}}\\Q_{\mathcal{E}} \ar[ur]^{\theta_{\mathcal{E}}}\ar[rr]^{\psi_{\mathcal{E}}}&&Q'_{\mathcal{E}} \ar[dr]^{\theta'_{\mathcal{E}}}\\A_{\mathcal{C}} \ar[u]_{\chi} \ar[r]^{\omega}\ar[d]^{\chi'} \ar@/_1.5cm/[ddr]_{\phi'_{\epsilon}}\ar@/^1.5cm/[uur]^{\phi_{\epsilon}}& Q_{\mathcal{E}} \ar[dr]_{\theta_{\mathcal{E}}} \ar[r]^{\psi_{\mathcal{E}}}& Q'_{\mathcal{E}} \ar[r]^{\theta'_{\mathcal{E}}} & P_{\mathcal{E}} \ar[r]^{\gamma_{\mathcal{E}}} & A_{\mathcal{E}}\\ Q'_{\mathcal{E}} \ar[dr]_{\theta'_{\mathcal{E}}} \ar[r]_{\psi'_{\mathcal{E}}}& Q_{\mathcal{E}} \ar[r]_{\theta_{\mathcal{E}}} & P_{\mathcal{E}} \ar@/_.3cm/[urr]^{\gamma_{\mathcal{E}}}\\ & P_{\mathcal{E}} \ar@/_.4cm/[uurrr]_{\gamma_{\mathcal{E}}}}\]
+
+
+		
+			
+			To complete the proof, we have to show that the horizontal composition is associative, the presence of identities and the interchange law.
 			\begin{itemize}
-				\item natural
+				
 				\item associativity
 				\item unitality
 				\item interchange\qedhere 
